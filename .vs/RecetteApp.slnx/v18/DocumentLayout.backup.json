@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\CCNB2eANNEE\\Printemps\\PROG1342\\RecetteApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{74E840FA-7304-458A-B6FF-397C7EF54733}|RecetteApp.csproj|d:\\ccnb2eannee\\printemps\\prog1342\\recetteapp\\services\\mealservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{74E840FA-7304-458A-B6FF-397C7EF54733}|RecetteApp.csproj|solutionrelative:services\\mealservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MealService.cs",
+              "DocumentMoniker": "D:\\CCNB2eANNEE\\Printemps\\PROG1342\\RecetteApp\\Services\\MealService.cs",
+              "RelativeDocumentMoniker": "Services\\MealService.cs",
+              "ToolTip": "D:\\CCNB2eANNEE\\Printemps\\PROG1342\\RecetteApp\\Services\\MealService.cs",
+              "RelativeToolTip": "Services\\MealService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAwBUAAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T18:39:50.545Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
