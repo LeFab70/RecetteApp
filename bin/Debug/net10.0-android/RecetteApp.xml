@@ -45,7 +45,7 @@
             <inheritdoc/>
         </member>
         <member name="P:RecetteApp.ViewModels.CategoryChipVm.Cle">
-            <summary>Valeur pour filtrer (<see cref="!:Meal.StrCategory"/>); « Toutes » = pas de filtre.</summary>
+            <summary>Valeur pour filtrer (nom TheMealDB égal à StrCategory sur Meal); « Toutes » = pas de filtre.</summary>
         </member>
         <member name="P:RecetteApp.ViewModels.CategoryChipVm.EstSelectionnee">
             <inheritdoc/>

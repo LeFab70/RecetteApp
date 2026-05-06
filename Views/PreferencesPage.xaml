@@ -38,55 +38,70 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Liste de courses : même ViewModel que l’ancien onglet -->
-        <Grid
+        <!-- Liste de courses : cadre pour la mettre en valeur -->
+        <Border
             x:Name="ShoppingRoot"
             Grid.Row="1"
-            RowDefinitions="Auto,Auto,*"
-            RowSpacing="10">
+            Margin="0,4,0,0"
+            Padding="14,16"
+            BackgroundColor="{AppThemeBinding Light=#F3F9F0, Dark=#162018}"
+            Stroke="{AppThemeBinding Light=#2E7D32, Dark=#66BB6A}"
+            StrokeThickness="2"
+            StrokeShape="RoundRectangle 14">
+            <Border.Shadow>
+                <Shadow
+                    Brush="{AppThemeBinding Light=#1B5E2040, Dark=#00000088}"
+                    Opacity="0.35"
+                    Radius="12"
+                    Offset="0,4" />
+            </Border.Shadow>
 
-            <Label
-                Grid.Row="0"
-                FontAttributes="Bold"
-                FontSize="18"
-                Text="Liste de courses" />
-            <Label
-                Grid.Row="1"
-                FontSize="13"
-                Opacity="0.8"
-                Text="Persistée dans Preferences · coches enregistrées automatiquement." />
+            <Grid RowDefinitions="Auto,Auto,*" RowSpacing="10">
 
-            <Grid Grid.Row="2" RowDefinitions="Auto,*" RowSpacing="8">
-                <HorizontalStackLayout Grid.Row="0" Spacing="10">
-                    <Button Command="{Binding EffacerCochesCommand}" Text="Retirer les cochés" />
-                    <Button Command="{Binding ToutEffacerCommand}" Text="Tout effacer" />
-                </HorizontalStackLayout>
+                <Label
+                    Grid.Row="0"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Liste de courses"
+                    TextColor="{AppThemeBinding Light=#1B5E20, Dark=#A5D6A7}" />
+                <Label
+                    Grid.Row="1"
+                    FontSize="13"
+                    Opacity="0.85"
+                    Text="Persistée dans Preferences · coches enregistrées automatiquement." />
 
-                <CollectionView Grid.Row="1" ItemsSource="{Binding Articles}">
-                    <CollectionView.EmptyView>
-                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
-                            <Label FontSize="22" HorizontalOptions="Center" Text="🛒" />
-                            <Label FontAttributes="Bold" HorizontalOptions="Center" Text="Liste vide" />
-                            <Label HorizontalOptions="Center" Opacity="0.75" Text="Ajoute des ingrédients depuis une recette." />
-                        </VerticalStackLayout>
-                    </CollectionView.EmptyView>
+                <Grid Grid.Row="2" RowDefinitions="Auto,*" RowSpacing="8">
+                    <HorizontalStackLayout Grid.Row="0" Spacing="10">
+                        <Button Command="{Binding EffacerCochesCommand}" Text="Retirer les cochés" />
+                        <Button Command="{Binding ToutEffacerCommand}" Text="Tout effacer" />
+                    </HorizontalStackLayout>
 
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:ShoppingItemRow">
-                            <Border
-                                Margin="4,2"
-                                Padding="10"
-                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
-                                StrokeShape="RoundRectangle 10">
-                                <Grid ColumnDefinitions="Auto,*">
-                                    <CheckBox Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding IsChecked}" />
-                                    <Label Grid.Column="1" LineBreakMode="WordWrap" Text="{Binding Text}" VerticalOptions="Center" />
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    <CollectionView Grid.Row="1" ItemsSource="{Binding Articles}">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                <Label FontSize="22" HorizontalOptions="Center" Text="🛒" />
+                                <Label FontAttributes="Bold" HorizontalOptions="Center" Text="Liste vide" />
+                                <Label HorizontalOptions="Center" Opacity="0.75" Text="Ajoute des ingrédients depuis une recette." />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ShoppingItemRow">
+                                <Border
+                                    Margin="4,2"
+                                    Padding="10"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <CheckBox Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding IsChecked}" />
+                                        <Label Grid.Column="1" LineBreakMode="WordWrap" Text="{Binding Text}" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
             </Grid>
-        </Grid>
+        </Border>
     </Grid>
 </ContentPage>

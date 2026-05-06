@@ -5,6 +5,8 @@
 RecetteApp est une application mobile développée avec **.NET MAUI** permettant de découvrir des recettes du monde entier.
 L’application utilise l’API gratuite **TheMealDB**, qui ne nécessite ni compte ni clé API.
 
+Sur l’**accueil**, une rangée de **puces catégories** (couleurs distinctes) permet de **filtrer** la liste en complément de la recherche. Un **bandeau hors ligne**, un **cache fichier** et un **JSON de secours** (`Resources/Raw/fallback_meals.json`) permettent de continuer à parcourir des repas sans réseau.
+
 ## 👨‍💻 Programmeurs
 
 - **Kayleb**
@@ -13,8 +15,8 @@ L’application utilise l’API gratuite **TheMealDB**, qui ne nécessite ni com
 
 ## 🎯 Objectifs du projet
 
-* Consulter des recettes par catégorie
-* Voir les détails d’une recette
+* Consulter des recettes et les **filtrer par catégorie** (puces colorées sur l’accueil)
+* Voir les **détails** d’une recette (ingrédients, étapes, lien vidéo, partage, ajout liste de courses)
 * Sauvegarder des favoris
 * Créer une liste de courses
 * Planifier les repas
@@ -23,16 +25,21 @@ L’application utilise l’API gratuite **TheMealDB**, qui ne nécessite ni com
 
 Le projet suit une structure organisée :
 
-* **Models** : données (recettes)
-* **Services** : communication avec l’API
+* **Models** : données (recettes, catégories API, favoris, planificateur, courses)
+* **Services** : communication avec l’API, SQLite, Preferences (thème, liste de courses)
+* **Helpers** : palette des puces catégories, extractions de texte pour les cartes
 * **ViewModels** : logique de l’application
 * **Views** : interface utilisateur
 
-## 🚀 Lancement (3 étapes)
+## 🚀 Lancement
 
-1. Ouvrir le projet (Visual Studio / Rider)
-2. Choisir **Android Emulator**
-3. Cliquer **Run**
+**IDE** : ouvrir le projet dans Visual Studio ou Rider, sélectionner **Android Emulator** (ou un appareil USB), puis **Run**.
+
+**CLI** (émulateur ou appareil déjà visible pour `adb`) :
+
+```bash
+dotnet build RecetteApp.csproj -c Debug -f net10.0-android -t:Run
+```
 
 ## 📅 Journal de travail (5 jours)
 
@@ -133,49 +140,80 @@ Ajouter la navigation Shell et la page **Mes Favoris** avec persistance.
 - Ajout d’une navigation par onglets (Shell TabBar)
 - Création de la page **Mes Favoris**
 - Ajout de **SQLite** pour sauvegarder les recettes favorites
-- Ajout du **SwipeView** pour supprimer un favori par glissement
-- Ajout d’une action “Favori” (swipe) depuis la liste principale
+- Ajout du **SwipeView** pour supprimer un favori par glissement (page Favoris uniquement)
+- Sur la liste **Recettes**, ajout / retrait favoris via le **bouton cœur** sur chaque ligne
 
 🧪 Résultat obtenu
 
 - On peut ajouter une recette aux favoris depuis la page Recettes
 - Les favoris restent après fermeture/réouverture de l’application
-- Suppression par glissement fonctionnelle dans la page Favoris
+- Suppression par glissement ou cœur fonctionnelle dans la page Favoris
 
-### Jour 4 — Liste de courses (Preferences) (à faire)
-
-🎯 Objectif
-
-Rendre une liste de courses persistante via Preferences.
-
-### Jour 5 — Finition & présentation (à faire)
+### Jour 4 — Détails, planificateur, préférences & liste de courses
 
 🎯 Objectif
 
-Finaliser le design, vérifier tous les scénarios (réseau présent/absent) et préparer la démo.
+Aller au-delà de la liste : fiche recette complète, plan de repas persisté, préférences (thème) et liste de courses.
+
+🔧 Travail réalisé
+
+- Page **Détail** (`DetailPage` / `DetailViewModel`) : navigation depuis une ligne de la liste ; ingrédients, instructions, YouTube, partage, ajout à la liste de courses, favori.
+- Onglet **Plan** : SQLite (`meal_planner.db3`, `MealPlannerDatabase`, `PlannedMeal`) pour associer des repas à des jours.
+- Onglet **Preferences** : choix de thème (clair / sombre / système) via `ThemeHelper` et **Preferences** ; liste de courses gérée par `ShoppingListStore` (persistance Preferences).
+- Service **MealService** : recherche, détail par id, liste des **catégories** (`categories.php`) pour les puces ; gestion d’erreurs réseau / parsing.
+
+🧪 Résultat obtenu
+
+- Navigation fluide liste → détail ; plan et courses survivent aux fermetures d’app ; thème cohérent au redémarrage.
+
+### Jour 5 — Finition & présentation
+
+🎯 Objectif
+
+Finaliser l’expérience utilisateur (filtres, cohérence UI) et valider les scénarios réseau / hors ligne.
+
+🔧 Travail réalisé
+
+- **Filtre par catégorie** sur l’accueil : `CategoryChipVm`, `CategoryChipPalette`, chargement des noms depuis l’API (repli sur catégories déduites des repas si besoin).
+- Affichage type cartes sur la liste (`MealListRowVm`), rafraîchissement et messages d’erreur avec **Réessayer**.
+- Vérifications manuelles : API disponible, mode dégradé hors ligne, favoris et plan.
 
 ## 🧭 Navigation (Shell)
 
-- **Recettes**: liste principale (recherche + refresh + fallback hors ligne)
-- **Favoris**: liste SQLite + suppression par SwipeView
+- **Recettes** : liste (recherche, pull-to-refresh, puces **catégories** colorées, cœur favori, bandeau hors ligne).
+- **Favoris** : SQLite ; suppression par **SwipeView** ou bouton **cœur** sur la carte.
+- **Plan** : planificateur de repas (SQLite).
+- **Preferences** : thème + liste de courses + informations utiles sur l’app.
+- **Détail** : ouverture depuis un tap sur une recette (pas un onglet Shell).
 
-## 💾 SQLite — Favoris
+## 📡 API TheMealDB (extrait)
 
-- Les favoris sont stockés localement dans une base SQLite (`favorites.db3`) et rechargés au démarrage.
-- La page Favoris utilise un **SwipeView** pour retirer un item.
+| Usage | Endpoint (v1) |
+|--------|----------------|
+| Recherche | `search.php?s=` |
+| Détail | `lookup.php?i=` |
+| Catégories | `categories.php` |
 
-## 🧩 Fichiers touchés / refactorés
+Le filtre catégorie côté app s’appuie sur le champ catégorie renvoyé avec chaque repas (`strCategory`), aligné sur les libellés TheMealDB lorsque l’API les fournit.
 
-- `RecetteApp.csproj` (ajout packages SQLite)
-- `MauiProgram.cs` (DI: `FavoritesDatabase`, `FavoritesPage`, `FavoritesViewModel`)
-- `AppShell.xaml` (TabBar navigation)
-- `Models/FavoriteMeal.cs` (modèle SQLite)
-- `Services/FavoritesDatabase.cs` (CRUD favoris)
-- `ViewModels/MainViewModel.cs` (commande Ajouter aux favoris + cache/fallback)
-- `Views/MainPage.xaml` (Swipe “Favori” + recherche/refresh/erreurs)
-- `ViewModels/FavoritesViewModel.cs` (chargement + suppression)
-- `Views/FavoritesPage.xaml` / `Views/FavoritesPage.xaml.cs` (UI + OnAppearing)
-- `Resources/Raw/fallback_meals.json` (données hors ligne)
+## 💾 Persistance locale
+
+| Donnée | Mécanisme |
+|--------|-----------|
+| Favoris | SQLite `favorites.db3` (`FavoritesDatabase`) |
+| Plan repas | SQLite `meal_planner.db3` (`MealPlannerDatabase`) |
+| Liste de courses / thème | `Preferences` (`ShoppingListStore`, `ThemeHelper`) |
+| Cache repas (réseau OK) | Fichier `meals_cache.json` dans le stockage app |
+
+## 🧩 Fichiers touchés / refactorés (principaux)
+
+- `RecetteApp.csproj`, `MauiProgram.cs`, `AppShell.xaml`, `App.xaml.cs`
+- `Models/` : `Meal.cs`, `MealCategory.cs`, `FavoriteMeal.cs`, `PlannedMeal.cs`, `ShoppingItemDto.cs`, réponses API
+- `Services/` : `MealService.cs`, `FavoritesDatabase.cs`, `MealPlannerDatabase.cs`, `ShoppingListStore.cs`, `ThemeHelper.cs`
+- `Helpers/` : `CategoryChipPalette.cs`, `RecetteTexteHelper.cs`
+- `ViewModels/` : `MainViewModel.cs`, `CategoryChipVm.cs`, `MealListRowVm.cs`, `DetailViewModel.cs`, `FavoritesViewModel.cs`, `MealPlannerViewModel.cs`, `JourPlanVm.cs`, `PreferencesViewModel.cs`, `ShoppingListViewModel.cs`
+- `Views/` : `MainPage`, `DetailPage`, `FavoritesPage`, `MealPlannerPage`, `PreferencesPage`
+- `Resources/Raw/fallback_meals.json`
 
 ## 🤖 Utilisation d’IA
 
