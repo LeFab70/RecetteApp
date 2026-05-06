@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RecetteApp.Models;
 using RecetteApp.Services;
+using RecetteApp.Views;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
@@ -80,6 +81,15 @@ public partial class MainViewModel : ObservableObject
     private async Task Reessayer()
     {
         await ChargerDonnees();
+    }
+
+    [RelayCommand]
+    private async Task OuvrirDetail(Meal? meal)
+    {
+        if (meal is null || string.IsNullOrWhiteSpace(meal.IdMeal))
+            return;
+
+        await Shell.Current.GoToAsync($"{nameof(DetailPage)}?IdMeal={Uri.EscapeDataString(meal.IdMeal)}");
     }
 
     [RelayCommand]

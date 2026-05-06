@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="RecetteApp.Views.MealPlannerPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:RecetteApp.ViewModels"
+    Title="Planificateur"
+    BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
+
+    <Grid Padding="12" RowDefinitions="Auto,*" RowSpacing="10">
+        <ActivityIndicator
+            Grid.Row="0"
+            HorizontalOptions="Center"
+            IsRunning="{Binding EstEnChargement}"
+            IsVisible="{Binding EstEnChargement}" />
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Jours}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:JourPlanVm">
+                    <Border
+                        Margin="4,6"
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                        StrokeShape="RoundRectangle 12">
+                        <VerticalStackLayout Spacing="8">
+                            <Label FontAttributes="Bold" FontSize="16" Text="{Binding Titre}" />
+                            <Label FontSize="12" Opacity="0.75" Text="Recette (favoris)" />
+                            <Picker
+                                ItemDisplayBinding="{Binding StrMeal}"
+                                ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.FavorisPourPicker}"
+                                SelectedItem="{Binding RepasChoisi, Mode=TwoWay}"
+                                Title="Choisir une recette" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

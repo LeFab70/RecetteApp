@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RecetteApp.Models;
 using RecetteApp.Services;
+using RecetteApp.Views;
 using System.Collections.ObjectModel;
 
 namespace RecetteApp.ViewModels;
@@ -37,6 +38,15 @@ public partial class FavoritesViewModel : ObservableObject
         {
             EstEnChargement = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task OuvrirDetail(FavoriteMeal? fav)
+    {
+        if (fav is null || string.IsNullOrWhiteSpace(fav.IdMeal))
+            return;
+
+        await Shell.Current.GoToAsync($"{nameof(DetailPage)}?IdMeal={Uri.EscapeDataString(fav.IdMeal)}");
     }
 
     [RelayCommand]

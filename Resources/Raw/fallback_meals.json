@@ -7,7 +7,15 @@
       "strArea": "Italian",
       "strInstructions": "1) Faire bouillir l'eau.\n2) Cuire les pâtes.\n3) Faire revenir l'ail.\n4) Mélanger et servir.",
       "strMealThumb": "",
-      "strYoutube": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      "strYoutube": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "strIngredient1": "Pâtes",
+      "strMeasure1": "400 g",
+      "strIngredient2": "Ail",
+      "strMeasure2": "3 gousses",
+      "strIngredient3": "Huile d'olive",
+      "strMeasure3": "2 c. à soupe",
+      "strIngredient4": "Sel",
+      "strMeasure4": ""
     },
     {
       "idMeal": "fallback-2",
@@ -16,7 +24,13 @@
       "strArea": "Japanese",
       "strInstructions": "1) Rincer le riz.\n2) Cuire.\n3) Ajouter garnitures au choix.\n4) Déguster.",
       "strMealThumb": "",
-      "strYoutube": ""
+      "strYoutube": "",
+      "strIngredient1": "Riz",
+      "strMeasure1": "200 g",
+      "strIngredient2": "Eau",
+      "strMeasure2": "400 ml",
+      "strIngredient3": "Sauce soja",
+      "strMeasure3": "1 c. à soupe"
     }
   ]
 }

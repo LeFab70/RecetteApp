@@ -25,12 +25,21 @@ namespace RecetteApp
             });
 
             builder.Services.AddSingleton<FavoritesDatabase>();
+            builder.Services.AddSingleton<MealPlannerDatabase>();
+            builder.Services.AddSingleton<ShoppingListStore>();
 
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<FavoritesViewModel>();
             builder.Services.AddTransient<FavoritesPage>();
-
+            builder.Services.AddTransient<DetailViewModel>();
+            builder.Services.AddTransient<DetailPage>();
+            builder.Services.AddTransient<ShoppingListViewModel>();
+            builder.Services.AddTransient<ShoppingListPage>();
+            builder.Services.AddTransient<MealPlannerViewModel>();
+            builder.Services.AddTransient<MealPlannerPage>();
+            builder.Services.AddTransient<PreferencesViewModel>();
+            builder.Services.AddTransient<PreferencesPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

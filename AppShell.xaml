@@ -4,16 +4,15 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:RecetteApp.Views"
-    Shell.BackgroundColor="Blue"
+    Shell.BackgroundColor="{AppThemeBinding Light=#1B5E20, Dark=#0D2818}"
     Shell.TitleColor="White">
 
     <TabBar>
-        <ShellContent
-            Title="Recettes"
-            ContentTemplate="{DataTemplate views:MainPage}" />
-        <ShellContent
-            Title="Favoris"
-            ContentTemplate="{DataTemplate views:FavoritesPage}" />
+        <ShellContent Title="Recettes" ContentTemplate="{DataTemplate views:MainPage}" />
+        <ShellContent Title="Favoris" ContentTemplate="{DataTemplate views:FavoritesPage}" />
+        <ShellContent Title="Courses" ContentTemplate="{DataTemplate views:ShoppingListPage}" />
+        <ShellContent Title="Plan" ContentTemplate="{DataTemplate views:MealPlannerPage}" />
+        <ShellContent Title="Réglages" ContentTemplate="{DataTemplate views:PreferencesPage}" />
     </TabBar>
 
 </Shell>

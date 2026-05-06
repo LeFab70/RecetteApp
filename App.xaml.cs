@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using RecetteApp.Services;
 
 namespace RecetteApp
 {
@@ -7,6 +7,7 @@ namespace RecetteApp
         public App()
         {
             InitializeComponent();
+            ThemeHelper.ApplySavedTheme();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

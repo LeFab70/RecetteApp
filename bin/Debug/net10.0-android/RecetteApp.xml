@@ -4,8 +4,129 @@
         <name>RecetteApp</name>
     </assembly>
     <members>
+        <member name="F:RecetteApp.Constants.ShoppingListPreferenceKey">
+            <summary>Clé Preferences pour la liste de courses (JSON).</summary>
+        </member>
+        <member name="T:RecetteApp.Models.Meal">
+            <summary>Ingrédients TheMealDB (strIngredient1…20 + strMeasure1…20).</summary>
+        </member>
+        <member name="M:RecetteApp.Models.Meal.GetIngredientLines">
+            <summary>Lignes « mesure + ingrédient » pour affichage et liste de courses.</summary>
+        </member>
+        <member name="T:RecetteApp.Models.PlannedMeal">
+            <summary>Un jour de la semaine (0 = lundi … 6 = dimanche) et la recette assignée.</summary>
+        </member>
+        <member name="M:RecetteApp.Services.MealService.GetMealByIdAsync(System.String)">
+            <summary>Récupère une recette complète (ingrédients, instructions…) via TheMealDB.</summary>
+        </member>
+        <member name="T:RecetteApp.Services.ShoppingListStore">
+            <summary>Liste de courses persistée dans Preferences (JSON).</summary>
+        </member>
+        <member name="M:RecetteApp.Services.ShoppingListStore.MergeIngredientsFromMeal(RecetteApp.Models.Meal)">
+            <summary>Ajoute les ingrédients d'une recette sans doublon (texte identique ignoré).</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.DetailViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.IdMeal">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.Recette">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.EstEnChargement">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.EstErreur">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.MessageErreur">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.AVideoYoutube">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.AfficheContenu">
+            <inheritdoc/>
+        </member>
+        <member name="M:RecetteApp.ViewModels.DetailViewModel.OnIdMealChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.DetailViewModel.IdMeal"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.DetailViewModel.IdMeal"/> is changed.</remarks>
+        </member>
+        <member name="F:RecetteApp.ViewModels.DetailViewModel.partagerCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.DetailViewModel.PartagerCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.PartagerCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.DetailViewModel.Partager"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.DetailViewModel.ouvrirYoutubeCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.DetailViewModel.OuvrirYoutubeCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.OuvrirYoutubeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.DetailViewModel.OuvrirYoutube"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.DetailViewModel.ajouterAListeCoursesCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.DetailViewModel.AjouterAListeCoursesCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.DetailViewModel.AjouterAListeCoursesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.DetailViewModel.AjouterAListeCourses"/>.</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.FavoritesViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.FavoritesViewModel.Favoris">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.FavoritesViewModel.EstEnChargement">
+            <inheritdoc/>
+        </member>
+        <member name="F:RecetteApp.ViewModels.FavoritesViewModel.chargerCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.FavoritesViewModel.ChargerCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.FavoritesViewModel.ChargerCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.FavoritesViewModel.Charger"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.FavoritesViewModel.ouvrirDetailCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.FavoritesViewModel.OuvrirDetailCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.FavoritesViewModel.OuvrirDetailCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.FavoritesViewModel.OuvrirDetail(RecetteApp.Models.FavoriteMeal)"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.FavoritesViewModel.supprimerCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.FavoritesViewModel.SupprimerCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.FavoritesViewModel.SupprimerCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.FavoritesViewModel.Supprimer(RecetteApp.Models.FavoriteMeal)"/>.</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.JourPlanVm">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.JourPlanVm.EstPretPourPersistance">
+            <summary>False pendant le chargement initial pour éviter d’effacer SQLite.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.JourPlanVm.RepasChoisi">
+            <inheritdoc/>
+        </member>
+        <member name="M:RecetteApp.ViewModels.JourPlanVm.OnRepasChoisiChanged(RecetteApp.Models.FavoriteMeal)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.JourPlanVm.RepasChoisi"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.JourPlanVm.RepasChoisi"/> is changed.</remarks>
+        </member>
         <member name="T:RecetteApp.ViewModels.MainViewModel">
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.Meals">
             <inheritdoc/>
         </member>
         <member name="P:RecetteApp.ViewModels.MainViewModel.EstEnChargement">
@@ -14,11 +135,111 @@
         <member name="P:RecetteApp.ViewModels.MainViewModel.EstFallback">
             <inheritdoc/>
         </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.EstErreurVisible">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.MessageErreur">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.TexteRecherche">
+            <inheritdoc/>
+        </member>
+        <member name="M:RecetteApp.ViewModels.MainViewModel.OnTexteRechercheChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.MainViewModel.TexteRecherche"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.MainViewModel.TexteRecherche"/> is changed.</remarks>
+        </member>
         <member name="F:RecetteApp.ViewModels.MainViewModel.chargerDonneesCommand">
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.ChargerDonneesCommand"/>.</summary>
         </member>
         <member name="P:RecetteApp.ViewModels.MainViewModel.ChargerDonneesCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.ChargerDonnees"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.MainViewModel.reessayerCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.ReessayerCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.ReessayerCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.Reessayer"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.MainViewModel.ouvrirDetailCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.OuvrirDetailCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.OuvrirDetailCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.OuvrirDetail(RecetteApp.Models.Meal)"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.MainViewModel.ajouterAuxFavorisCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.AjouterAuxFavorisCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.AjouterAuxFavorisCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.AjouterAuxFavoris(RecetteApp.Models.Meal)"/>.</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.MealPlannerViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.FavorisPourPicker">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.Jours">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.EstEnChargement">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.OptionAucune">
+            <summary>Entrée pour vider le jour dans le Picker.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.chargerCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.Charger"/>.</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.PreferencesViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.PreferencesViewModel.ThemeChoisi">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.PreferencesViewModel.VersionApplication">
+            <inheritdoc/>
+        </member>
+        <member name="M:RecetteApp.ViewModels.PreferencesViewModel.OnThemeChoisiChanged(RecetteApp.ViewModels.ThemeOptionVm)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.PreferencesViewModel.ThemeChoisi"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.PreferencesViewModel.ThemeChoisi"/> is changed.</remarks>
+        </member>
+        <member name="T:RecetteApp.ViewModels.ShoppingItemRow">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.ShoppingItemRow.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.ShoppingItemRow.Text">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.ShoppingItemRow.IsChecked">
+            <inheritdoc/>
+        </member>
+        <member name="T:RecetteApp.ViewModels.ShoppingListViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.ShoppingListViewModel.Articles">
+            <inheritdoc/>
+        </member>
+        <member name="F:RecetteApp.ViewModels.ShoppingListViewModel.effacerCochesCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.ShoppingListViewModel.EffacerCochesCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.ShoppingListViewModel.EffacerCochesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.ShoppingListViewModel.EffacerCoches"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.ShoppingListViewModel.toutEffacerCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.ShoppingListViewModel.ToutEffacerCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.ShoppingListViewModel.ToutEffacerCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.ShoppingListViewModel.ToutEffacer"/>.</summary>
         </member>
         <member name="T:RecetteApp.Resource">
             <summary>
@@ -32,11 +253,68 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IdMeal">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IdMeal" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Recette">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Recette" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstEnChargement">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstEnChargement" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstErreur">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstErreur" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.MessageErreur">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "MessageErreur" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AVideoYoutube">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AVideoYoutube" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AfficheContenu">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AfficheContenu" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Favoris">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Favoris" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RepasChoisi">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RepasChoisi" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Meals">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Meals" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstFallback">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstFallback" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstErreurVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstErreurVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TexteRecherche">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TexteRecherche" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FavorisPourPicker">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FavorisPourPicker" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Jours">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Jours" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ThemeChoisi">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ThemeChoisi" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.VersionApplication">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "VersionApplication" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Id">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Id" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Text">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Text" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsChecked">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsChecked" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Articles">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Articles" generated properties.</summary>
         </member>
         <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
             <summary>
@@ -44,11 +322,68 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IdMeal">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IdMeal" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Recette">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Recette" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstEnChargement">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstEnChargement" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstErreur">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstErreur" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.MessageErreur">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "MessageErreur" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AVideoYoutube">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AVideoYoutube" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AfficheContenu">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AfficheContenu" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Favoris">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Favoris" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RepasChoisi">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RepasChoisi" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Meals">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Meals" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstFallback">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstFallback" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstErreurVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstErreurVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TexteRecherche">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TexteRecherche" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FavorisPourPicker">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FavorisPourPicker" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Jours">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Jours" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ThemeChoisi">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ThemeChoisi" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.VersionApplication">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "VersionApplication" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Id">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Id" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Text">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Text" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsChecked">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsChecked" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Articles">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Articles" generated properties.</summary>
         </member>
     </members>
 </doc>

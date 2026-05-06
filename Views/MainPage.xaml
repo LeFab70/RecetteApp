@@ -72,6 +72,11 @@
                                     Padding="10"
                                     StrokeShape="RoundRectangle 12"
                                     BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
 
                                     <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
                                         <Border

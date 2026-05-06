@@ -1,10 +1,12 @@
-﻿namespace RecetteApp
+using RecetteApp.Views;
+
+namespace RecetteApp;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        Routing.RegisterRoute(nameof(DetailPage), typeof(DetailPage));
     }
 }

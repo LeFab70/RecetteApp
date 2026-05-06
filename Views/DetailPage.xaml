@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="RecetteApp.Views.DetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Détail"
+    BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="14" Spacing="12">
+
+            <ActivityIndicator IsRunning="{Binding EstEnChargement}" IsVisible="{Binding EstEnChargement}" />
+
+            <Border
+                Padding="12"
+                BackgroundColor="{AppThemeBinding Light=#F8D7DA, Dark=#3A1A1D}"
+                IsVisible="{Binding EstErreur}"
+                StrokeShape="RoundRectangle 10">
+                <Label Text="{Binding MessageErreur}" TextColor="{AppThemeBinding Light=#721C24, Dark=#FFB3BA}" />
+            </Border>
+
+            <VerticalStackLayout IsVisible="{Binding AfficheContenu}" Spacing="12">
+                <Image Aspect="AspectFill" HeightRequest="220" Source="{Binding Recette.StrMealThumb}" />
+
+                <Label FontAttributes="Bold" FontSize="22" Text="{Binding Recette.StrMeal}" />
+                <HorizontalStackLayout Spacing="8">
+                    <Label FontSize="13" Opacity="0.85" Text="{Binding Recette.StrCategory}" />
+                    <Label FontSize="13" Text="•" />
+                    <Label FontSize="13" Opacity="0.85" Text="{Binding Recette.StrArea}" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Button Command="{Binding OuvrirYoutubeCommand}" IsVisible="{Binding AVideoYoutube}" Text="Vidéo YouTube" />
+                    <Button Command="{Binding PartagerCommand}" Text="Partager" />
+                    <Button Command="{Binding AjouterAListeCoursesCommand}" Text="+ Liste courses" />
+                </HorizontalStackLayout>
+
+                <Label FontAttributes="Bold" FontSize="18" Text="Ingrédients" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="6">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="•" VerticalOptions="Start" />
+                                <Label Text="{Binding .}" VerticalOptions="Start" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Label FontAttributes="Bold" FontSize="18" Text="Étapes" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Etapes}" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Label LineBreakMode="WordWrap" Text="{Binding .}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

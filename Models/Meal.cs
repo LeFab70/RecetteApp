@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RecetteApp.Models;
 
-public class Meal
+public partial class Meal
 {
     public string IdMeal { get; set; } = string.Empty;
     public string StrMeal { get; set; } = string.Empty;
