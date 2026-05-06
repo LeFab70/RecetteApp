@@ -18,4 +18,10 @@ public partial class MealPlannerPage : ContentPage
         base.OnAppearing();
         await _vm.Charger();
     }
+
+    private void OnRepasRemainingThreshold(object? sender, EventArgs e)
+    {
+        if (_vm.ChargerPlusRepasCommand.CanExecute(null))
+            _ = _vm.ChargerPlusRepasCommand.ExecuteAsync(null);
+    }
 }

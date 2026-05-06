@@ -5,7 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:RecetteApp.Views"
     Shell.BackgroundColor="{AppThemeBinding Light=#1B5E20, Dark=#0D2818}"
-    Shell.TitleColor="White">
+    Shell.TitleColor="White"
+    Shell.TabBarBackgroundColor="{AppThemeBinding Light=#B2DFDB, Dark=#1E3D32}"
+    Shell.TabBarForegroundColor="{AppThemeBinding Light=#004D40, Dark=#E0F2F1}"
+    Shell.TabBarTitleColor="{AppThemeBinding Light=#003322, Dark=#FFFFFF}"
+    Shell.TabBarUnselectedColor="{AppThemeBinding Light=#2E7D72, Dark=#80CBC4}">
 
     <TabBar>
         <ShellContent Title="Recettes" ContentTemplate="{DataTemplate views:MainPage}" />

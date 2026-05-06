@@ -7,33 +7,194 @@
     Title="Planificateur"
     BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
 
-    <Grid Padding="12" RowDefinitions="Auto,*" RowSpacing="10">
-        <ActivityIndicator
-            Grid.Row="0"
-            HorizontalOptions="Center"
-            IsRunning="{Binding EstEnChargement}"
-            IsVisible="{Binding EstEnChargement}" />
+    <Grid Padding="12" RowDefinitions="Auto,2*,3*" RowSpacing="14">
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Jours}">
+        <VerticalStackLayout Grid.Row="0" Spacing="6">
+            <Label
+                FontSize="13"
+                LineBreakMode="WordWrap"
+                Opacity="0.88"
+                Text="Choisis un jour coloré, puis touche une vignette pour l’assigner à ce jour." />
+            <ActivityIndicator HorizontalOptions="Center" IsRunning="{Binding EstEnChargement}" IsVisible="{Binding EstEnChargement}" />
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Jours}" SelectionMode="None" VerticalOptions="Fill">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:JourPlanVm">
                     <Border
-                        Margin="4,6"
                         Padding="12"
-                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
-                        StrokeShape="RoundRectangle 12">
-                        <VerticalStackLayout Spacing="8">
-                            <Label FontAttributes="Bold" FontSize="16" Text="{Binding Titre}" />
-                            <Label FontSize="12" Opacity="0.75" Text="Recette (favoris)" />
-                            <Picker
-                                ItemDisplayBinding="{Binding StrMeal}"
-                                ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.FavorisPourPicker}"
-                                SelectedItem="{Binding RepasChoisi, Mode=TwoWay}"
-                                Title="Choisir une recette" />
-                        </VerticalStackLayout>
+                        BackgroundColor="{Binding CouleurFondCarte}"
+                        StrokeShape="RoundRectangle 14"
+                        StrokeThickness="0">
+                        <Border.Triggers>
+                            <DataTrigger Binding="{Binding EstSelectionne}" TargetType="Border" Value="True">
+                                <Setter Property="Stroke" Value="{AppThemeBinding Light=#1B5E20, Dark=#81C784}" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding EstSelectionne}" TargetType="Border" Value="False">
+                                <Setter Property="Stroke" Value="Transparent" />
+                                <Setter Property="StrokeThickness" Value="0" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectionnerJourCommand}" CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="8">
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontAttributes="Bold"
+                                FontSize="17"
+                                Text="{Binding Titre}"
+                                TextColor="{Binding CouleurTexteTitre}"
+                                VerticalOptions="Center" />
+
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Padding="10,4"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EffacerJourCommand}"
+                                CommandParameter="{Binding .}"
+                                CornerRadius="8"
+                                FontSize="12"
+                                IsVisible="{Binding AUnRepasPlanifie}"
+                                Text="Effacer"
+                                VerticalOptions="Center" />
+
+                            <Grid
+                                Grid.Row="1"
+                                Grid.ColumnSpan="2"
+                                ColumnDefinitions="Auto,*"
+                                ColumnSpacing="10">
+                                <Border
+                                    Grid.Column="0"
+                                    HeightRequest="56"
+                                    IsVisible="{Binding AUnRepasPlanifie}"
+                                    Stroke="{AppThemeBinding Light=#00000018, Dark=#FFFFFF22}"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="1"
+                                    WidthRequest="56">
+                                    <Image Aspect="AspectFill">
+                                        <Image.Source>
+                                            <UriImageSource Uri="{Binding RepasChoisi.StrMealThumb}" />
+                                        </Image.Source>
+                                    </Image>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        IsVisible="{Binding AUnRepasPlanifie}"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="2"
+                                        Text="{Binding RepasChoisi.StrMeal}"
+                                        TextColor="{Binding CouleurTexteTitre}" />
+                                    <Label
+                                        FontSize="13"
+                                        IsVisible="{Binding SansRepasPlanifie}"
+                                        LineBreakMode="WordWrap"
+                                        Opacity="0.78"
+                                        Text="Aucun repas — choisis une vignette ci-dessous."
+                                        TextColor="{Binding CouleurTexteTitre}" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Grid Grid.Row="2" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="8">
+
+            <Label
+                Grid.Row="0"
+                FontAttributes="Bold"
+                FontSize="16"
+                Text="Recettes (TheMealDB)"
+                TextColor="{AppThemeBinding Light=#1B5E20, Dark=#A5D6A7}" />
+
+            <Label
+                Grid.Row="1"
+                FontSize="12"
+                IsVisible="{Binding AErreurListe}"
+                LineBreakMode="WordWrap"
+                Text="{Binding ErreurListeRepas}"
+                TextColor="{AppThemeBinding Light=#B71C1C, Dark=#FFCDD2}" />
+
+            <Grid Grid.Row="2">
+                <CollectionView
+                    x:Name="RepasCollection"
+                    ItemsSource="{Binding TuilesRepas}"
+                    RemainingItemsThreshold="8"
+                    RemainingItemsThresholdReached="OnRepasRemainingThreshold"
+                    SelectionMode="None"
+                    VerticalOptions="Fill">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="10"
+                            Orientation="Vertical"
+                            Span="2"
+                            VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.EmptyView>
+                        <Label
+                            Margin="0,28"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Opacity="0.65"
+                            Text="Les vignettes apparaîtront ici. Tire pour charger des lots supplémentaires." />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PlannerMealTileVm">
+                            <Border
+                                Padding="8"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                                Stroke="{AppThemeBinding Light=#00000014, Dark=#FFFFFF18}"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="1">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AssignerTuileAuJourSelectionneCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="6">
+                                    <Border HeightRequest="78" StrokeShape="RoundRectangle 10">
+                                        <Image Aspect="AspectFill">
+                                            <Image.Source>
+                                                <UriImageSource Uri="{Binding StrMealThumb}" />
+                                            </Image.Source>
+                                        </Image>
+                                    </Border>
+                                    <Label
+                                        FontSize="12"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="2"
+                                        Text="{Binding StrMeal}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator
+                    Margin="0,0,0,8"
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding EstChargementListePlus}"
+                    IsVisible="{Binding EstChargementListePlus}"
+                    VerticalOptions="End" />
+            </Grid>
+
+            <Label
+                Grid.Row="3"
+                FontSize="12"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding PlusDeRepasDisponibles}"
+                Opacity="0.75"
+                Text="Tu as parcouru tous les lots disponibles pour cette session." />
+        </Grid>
     </Grid>
 </ContentPage>

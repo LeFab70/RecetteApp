@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.ApplicationModel;
 using RecetteApp.Models;
 using RecetteApp.Services;
 using System.Collections.ObjectModel;
@@ -8,10 +9,16 @@ namespace RecetteApp.ViewModels;
 
 public partial class MealPlannerViewModel : ObservableObject
 {
-    private readonly FavoritesDatabase _favorites;
+    private readonly MealService _mealService;
     private readonly MealPlannerDatabase _planner;
 
-    private bool _chargementEnCours;
+    private bool _chargementListeInitial;
+    private bool _chargementListePlusEnCours;
+    private readonly Queue<(bool ParCategorie, string Token)> _fileChargement = new();
+    private readonly HashSet<string> _idsDejaCharges = new(StringComparer.Ordinal);
+    private bool _plusDeLotsDispo;
+
+    private bool _chargementSemaineEnCours;
 
     private static readonly string[] TitresJours =
     [
@@ -19,15 +26,32 @@ public partial class MealPlannerViewModel : ObservableObject
     ];
 
     [ObservableProperty]
-    public partial ObservableCollection<FavoriteMeal> FavorisPourPicker { get; set; } = new();
-
-    [ObservableProperty]
     public partial ObservableCollection<JourPlanVm> Jours { get; set; } = new();
+
+    /// <summary>Repas affichés en vignettes ; complété au scroll (<see cref="ChargerPlusRepasAsync"/>).</summary>
+    [ObservableProperty]
+    public partial ObservableCollection<PlannerMealTileVm> TuilesRepas { get; set; } = new();
 
     [ObservableProperty]
     public partial bool EstEnChargement { get; set; }
 
-    /// <summary>Entrée pour vider le jour dans le Picker.</summary>
+    /// <summary>Chargement d’un lot supplémentaire (pagination).</summary>
+    [ObservableProperty]
+    public partial bool EstChargementListePlus { get; set; }
+
+    [ObservableProperty]
+    public partial string? ErreurListeRepas { get; set; }
+
+    public bool AErreurListe => !string.IsNullOrWhiteSpace(ErreurListeRepas);
+
+    partial void OnErreurListeRepasChanged(string? value) => OnPropertyChanged(nameof(AErreurListe));
+
+    [ObservableProperty]
+    public partial bool PlusDeRepasDisponibles { get; set; }
+
+    [ObservableProperty]
+    public partial JourPlanVm? JourSelectionne { get; set; }
+
     public FavoriteMeal OptionAucune { get; } = new()
     {
         IdMeal = string.Empty,
@@ -37,16 +61,16 @@ public partial class MealPlannerViewModel : ObservableObject
         StrMealThumb = string.Empty
     };
 
-    public MealPlannerViewModel(FavoritesDatabase favorites, MealPlannerDatabase planner)
+    public MealPlannerViewModel(MealService mealService, MealPlannerDatabase planner)
     {
-        _favorites = favorites;
+        _mealService = mealService;
         _planner = planner;
 
         for (var i = 0; i < 7; i++)
         {
             var jour = new JourPlanVm(_planner, i, TitresJours[i])
             {
-                EstPretPourPersistance = () => !_chargementEnCours
+                EstPretPourPersistance = () => !_chargementSemaineEnCours
             };
             Jours.Add(jour);
         }
@@ -58,13 +82,9 @@ public partial class MealPlannerViewModel : ObservableObject
         try
         {
             EstEnChargement = true;
-            _chargementEnCours = true;
+            _chargementSemaineEnCours = true;
 
-            var favs = await _favorites.GetAll();
-            FavorisPourPicker.Clear();
-            FavorisPourPicker.Add(OptionAucune);
-            foreach (var f in favs.OrderBy(x => x.StrMeal))
-                FavorisPourPicker.Add(f);
+            RafraichirCouleursJours();
 
             var semaine = await _planner.GetWeekAsync();
             foreach (var jourVm in Jours)
@@ -76,24 +96,183 @@ public partial class MealPlannerViewModel : ObservableObject
                     continue;
                 }
 
-                var match = FavorisPourPicker.FirstOrDefault(f => f.IdMeal == row.IdMeal);
-                jourVm.RepasChoisi = match ?? new FavoriteMeal
+                jourVm.RepasChoisi = new FavoriteMeal
                 {
                     IdMeal = row.IdMeal,
                     StrMeal = row.StrMeal,
                     StrCategory = string.Empty,
                     StrArea = string.Empty,
-                    StrMealThumb = row.StrMealThumb
+                    StrMealThumb = row.StrMealThumb ?? string.Empty
                 };
+            }
 
-                if (match is null && !string.IsNullOrWhiteSpace(row.IdMeal))
-                    FavorisPourPicker.Add(jourVm.RepasChoisi);
+            await InitialiserFileEtPremiersRepasAsync();
+
+            if (JourSelectionne is null)
+                SelectionnerJour(Jours[0]);
+            else
+            {
+                var encoreLa = Jours.FirstOrDefault(j => j.DayIndex == JourSelectionne.DayIndex);
+                if (encoreLa is not null)
+                    SelectionnerJour(encoreLa);
+                else
+                    SelectionnerJour(Jours[0]);
             }
         }
         finally
         {
-            _chargementEnCours = false;
+            _chargementSemaineEnCours = false;
             EstEnChargement = false;
         }
+    }
+
+    private void RafraichirCouleursJours()
+    {
+        var sombre = Application.Current?.RequestedTheme == AppTheme.Dark;
+        foreach (var j in Jours)
+            j.AppliquerPalette(sombre);
+    }
+
+    private async Task InitialiserFileEtPremiersRepasAsync()
+    {
+        ErreurListeRepas = null;
+        _plusDeLotsDispo = false;
+        PlusDeRepasDisponibles = false;
+        _idsDejaCharges.Clear();
+        TuilesRepas.Clear();
+        _fileChargement.Clear();
+
+        try
+        {
+            var categories = await _mealService.GetCategoryNamesAsync();
+            if (categories.Count > 0)
+            {
+                foreach (var c in categories)
+                    _fileChargement.Enqueue((true, c));
+            }
+            else
+            {
+                const string alphabet = "abcdefghijklmnopqrstuvwxyz";
+                foreach (var ch in alphabet)
+                    _fileChargement.Enqueue((false, ch.ToString()));
+            }
+        }
+        catch (Exception ex)
+        {
+            ErreurListeRepas = ex.Message;
+            const string alphabet = "abcdefghijklmnopqrstuvwxyz";
+            foreach (var ch in alphabet)
+                _fileChargement.Enqueue((false, ch.ToString()));
+        }
+
+        _chargementListeInitial = true;
+        try
+        {
+            await ChargerPlusRepasAsync();
+            await ChargerPlusRepasAsync();
+        }
+        finally
+        {
+            _chargementListeInitial = false;
+        }
+    }
+
+    /// <summary>Appelé quand l’utilisateur approche du bas de la grille des repas.</summary>
+    [RelayCommand]
+    public async Task ChargerPlusRepasAsync()
+    {
+        if (_plusDeLotsDispo || _chargementListePlusEnCours)
+            return;
+
+        _chargementListePlusEnCours = true;
+        if (!_chargementListeInitial)
+            EstChargementListePlus = true;
+
+        try
+        {
+            while (_fileChargement.Count > 0)
+            {
+                var (parCat, token) = _fileChargement.Dequeue();
+                List<Meal> lot;
+                try
+                {
+                    lot = parCat
+                        ? await _mealService.FilterMealsByCategoryAsync(token)
+                        : await _mealService.SearchMealsAsync(token);
+                }
+                catch (Exception ex)
+                {
+                    ErreurListeRepas = ex.Message;
+                    continue;
+                }
+
+                var nouveaux = new List<PlannerMealTileVm>();
+                foreach (var m in lot)
+                {
+                    var id = m.IdMeal.Trim();
+                    if (_idsDejaCharges.Contains(id))
+                        continue;
+                    _idsDejaCharges.Add(id);
+                    nouveaux.Add(new PlannerMealTileVm(id, m.StrMeal ?? "", m.StrMealThumb ?? ""));
+                }
+
+                if (nouveaux.Count > 0)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        foreach (var t in nouveaux)
+                            TuilesRepas.Add(t);
+                    });
+
+                    PlusDeRepasDisponibles = false;
+                    return;
+                }
+            }
+
+            _plusDeLotsDispo = true;
+            PlusDeRepasDisponibles = true;
+        }
+        finally
+        {
+            _chargementListePlusEnCours = false;
+            EstChargementListePlus = false;
+        }
+    }
+
+    [RelayCommand]
+    public void SelectionnerJour(JourPlanVm? jour)
+    {
+        if (jour is null)
+            return;
+
+        foreach (var j in Jours)
+            j.EstSelectionne = ReferenceEquals(j, jour);
+
+        JourSelectionne = jour;
+    }
+
+    [RelayCommand]
+    public void EffacerJour(JourPlanVm? jour)
+    {
+        if (jour is null)
+            return;
+
+        jour.RepasChoisi = OptionAucune;
+    }
+
+    [RelayCommand]
+    public void AssignerTuileAuJourSelectionne(PlannerMealTileVm? tuile)
+    {
+        if (tuile is null || JourSelectionne is null || string.IsNullOrWhiteSpace(tuile.IdMeal))
+            return;
+
+        JourSelectionne.RepasChoisi = new FavoriteMeal
+        {
+            IdMeal = tuile.IdMeal,
+            StrMeal = tuile.StrMeal,
+            StrCategory = string.Empty,
+            StrArea = string.Empty,
+            StrMealThumb = tuile.StrMealThumb
+        };
     }
 }
