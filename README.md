@@ -30,9 +30,9 @@ Le projet suit une structure organisée :
 
 ## 🚀 Lancement (3 étapes)
 
-1. Ouvrir le projet dans Visual Studio / Rider avec le workload **.NET MAUI** installé
-2. Sélectionner **Android Emulator** comme cible
-3. Démarrer l’application (Run)
+1. Ouvrir le projet (Visual Studio / Rider)
+2. Choisir **Android Emulator**
+3. Cliquer **Run**
 
 ## 📅 Journal de travail (5 jours)
 
