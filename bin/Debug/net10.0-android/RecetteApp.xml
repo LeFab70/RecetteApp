@@ -7,6 +7,9 @@
         <member name="F:RecetteApp.Constants.ShoppingListPreferenceKey">
             <summary>Clé Preferences pour la liste de courses (JSON).</summary>
         </member>
+        <member name="T:RecetteApp.Helpers.CategoryChipPalette">
+            <summary>Couleurs pastel distinctes pour les puces catégories (style NewsApp).</summary>
+        </member>
         <member name="M:RecetteApp.Helpers.RecetteTexteHelper.ApercuInstructions(System.String,System.Int32)">
             <summary>Texte court sur une ligne pour les cartes (suite dans Détail).</summary>
         </member>
@@ -19,8 +22,14 @@
         <member name="M:RecetteApp.Models.Meal.GetIngredientLines">
             <summary>Lignes « mesure + ingrédient » pour affichage et liste de courses.</summary>
         </member>
+        <member name="T:RecetteApp.Models.MealCategoriesResponse">
+            <summary>Réponse TheMealDB pour categories.php.</summary>
+        </member>
         <member name="T:RecetteApp.Models.PlannedMeal">
             <summary>Un jour de la semaine (0 = lundi … 6 = dimanche) et la recette assignée.</summary>
+        </member>
+        <member name="M:RecetteApp.Services.MealService.GetCategoryNamesAsync">
+            <summary>Liste des noms de catégories (cuisines) depuis TheMealDB.</summary>
         </member>
         <member name="M:RecetteApp.Services.MealService.GetMealByIdAsync(System.String)">
             <summary>Récupère une recette complète (ingrédients, instructions…) via TheMealDB.</summary>
@@ -30,6 +39,21 @@
         </member>
         <member name="M:RecetteApp.Services.ShoppingListStore.MergeIngredientsFromMeal(RecetteApp.Models.Meal)">
             <summary>Ajoute les ingrédients d'une recette sans doublon (texte identique ignoré).</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.CategoryChipVm">
+            <summary>Puce catégorie sur l’accueil.</summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.CategoryChipVm.Cle">
+            <summary>Valeur pour filtrer (<see cref="!:Meal.StrCategory"/>); « Toutes » = pas de filtre.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.CategoryChipVm.EstSelectionnee">
+            <inheritdoc/>
+        </member>
+        <member name="M:RecetteApp.ViewModels.CategoryChipVm.OnEstSelectionneeChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.CategoryChipVm.EstSelectionnee"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.CategoryChipVm.EstSelectionnee"/> is changed.</remarks>
         </member>
         <member name="T:RecetteApp.ViewModels.DetailViewModel">
             <inheritdoc/>
@@ -166,6 +190,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:RecetteApp.ViewModels.MainViewModel.Meals">
             <inheritdoc/>
@@ -204,6 +229,12 @@
         </member>
         <member name="P:RecetteApp.ViewModels.MainViewModel.ReessayerCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.Reessayer"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.MainViewModel.selectionnerCategorieCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.SelectionnerCategorieCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.SelectionnerCategorieCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.SelectionnerCategorie(RecetteApp.ViewModels.CategoryChipVm)"/>.</summary>
         </member>
         <member name="F:RecetteApp.ViewModels.MainViewModel.ouvrirDetailCommand">
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.OuvrirDetailCommand"/>.</summary>
@@ -312,6 +343,9 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstSelectionnee">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstSelectionnee" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IdMeal">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IdMeal" generated properties.</summary>
         </member>
@@ -383,6 +417,9 @@
             A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstSelectionnee">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstSelectionnee" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IdMeal">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IdMeal" generated properties.</summary>

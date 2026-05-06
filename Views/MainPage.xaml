@@ -6,7 +6,7 @@
     Title="Recettes - Menu"
     BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
 
-    <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="10">
+    <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="10">
 
         <Border
             Grid.Row="0"
@@ -24,8 +24,48 @@
             Placeholder="Rechercher une recette, catégorie, pays…"
             Text="{Binding TexteRecherche}" />
 
+        <VerticalStackLayout Grid.Row="2" Spacing="6">
+            <Label
+                FontSize="12"
+                Opacity="0.75"
+                Text="Filtrer par catégorie" />
+            <CollectionView
+                HeightRequest="56"
+                ItemsSource="{Binding CategoriesFil}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="8" Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:CategoryChipVm">
+                        <Border
+                            Padding="14,10"
+                            Margin="0,0,0,4"
+                            BackgroundColor="{Binding Fond}"
+                            Stroke="{Binding CouleurBordure}"
+                            StrokeShape="RoundRectangle 18"
+                            StrokeThickness="{Binding EpaisseurBordure}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectionnerCategorieCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                LineBreakMode="TailTruncation"
+                                MaxLines="1"
+                                Text="{Binding Libelle}"
+                                TextColor="{Binding CouleurTexte}"
+                                VerticalOptions="Center" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
         <Border
-            Grid.Row="2"
+            Grid.Row="3"
             Padding="10"
             BackgroundColor="{AppThemeBinding Light=#F8D7DA, Dark=#3A1A1D}"
             IsVisible="{Binding EstErreurVisible}">
@@ -42,7 +82,7 @@
         </Border>
 
         <RefreshView
-            Grid.Row="3"
+            Grid.Row="4"
             IsRefreshing="{Binding EstEnChargement}"
             Command="{Binding ChargerDonneesCommand}">
             <Grid RowDefinitions="Auto,*">

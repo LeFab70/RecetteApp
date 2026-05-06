@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RecetteApp.Helpers;
 using RecetteApp.Models;
 using RecetteApp.Services;
 using RecetteApp.Views;
@@ -14,8 +15,14 @@ public partial class MainViewModel : ObservableObject
     private readonly FavoritesDatabase _favoritesDb;
 
     private const string CacheFileName = "meals_cache.json";
+    private const string CleToutes = "Toutes";
+
     private List<Meal> _toutesLesMeals = new();
     private HashSet<string> _idsFavoris = new(StringComparer.Ordinal);
+
+    private string _cleCategorieSelectionnee = CleToutes;
+
+    public ObservableCollection<CategoryChipVm> CategoriesFil { get; } = new();
 
     [ObservableProperty]
     public partial ObservableCollection<MealListRowVm> Meals { get; set; } = new();
@@ -60,6 +67,7 @@ public partial class MainViewModel : ObservableObject
 
             SauvegarderCache(_toutesLesMeals);
             await RafraichirIdsFavorisAsync();
+            await ConstruireCategoriesAsync();
             RafraichirListeAffichee();
         }
         catch (Exception ex)
@@ -69,6 +77,7 @@ public partial class MainViewModel : ObservableObject
             var cached = await ChargerDepuisCacheOuFallbackLocal();
             _toutesLesMeals = cached;
             await RafraichirIdsFavorisAsync();
+            await ConstruireCategoriesAsync();
             RafraichirListeAffichee();
 
             EstErreurVisible = true;
@@ -84,6 +93,20 @@ public partial class MainViewModel : ObservableObject
     private async Task Reessayer()
     {
         await ChargerDonnees();
+    }
+
+    [RelayCommand]
+    private void SelectionnerCategorie(CategoryChipVm? chip)
+    {
+        if (chip is null)
+            return;
+
+        _cleCategorieSelectionnee = chip.Cle;
+
+        foreach (var c in CategoriesFil)
+            c.EstSelectionnee = string.Equals(c.Cle, _cleCategorieSelectionnee, StringComparison.OrdinalIgnoreCase);
+
+        RafraichirListeAffichee();
     }
 
     [RelayCommand]
@@ -129,6 +152,45 @@ public partial class MainViewModel : ObservableObject
             .ToHashSet(StringComparer.Ordinal);
     }
 
+    private async Task ConstruireCategoriesAsync()
+    {
+        CategoriesFil.Clear();
+
+        List<string> noms;
+        try
+        {
+            noms = await _mealService.GetCategoryNamesAsync();
+        }
+        catch
+        {
+            noms = _toutesLesMeals
+                .Select(m => (m.StrCategory ?? string.Empty).Trim())
+                .Where(s => s.Length > 0)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(s => s, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        CategoriesFil.Add(new CategoryChipVm(CleToutes, CleToutes, CategoryChipPalette.FondToutes, CategoryChipPalette.TexteToutes, -1));
+
+        var idx = 0;
+        foreach (var name in noms)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
+
+            CategoriesFil.Add(new CategoryChipVm(name.Trim(), name.Trim(), CategoryChipPalette.Fond(idx), CategoryChipPalette.Texte(idx), idx));
+            idx++;
+        }
+
+        var existe = CategoriesFil.Any(c => string.Equals(c.Cle, _cleCategorieSelectionnee, StringComparison.OrdinalIgnoreCase));
+        if (!existe)
+            _cleCategorieSelectionnee = CleToutes;
+
+        foreach (var c in CategoriesFil)
+            c.EstSelectionnee = string.Equals(c.Cle, _cleCategorieSelectionnee, StringComparison.OrdinalIgnoreCase);
+    }
+
     private void RafraichirListeAffichee()
     {
         Meals.Clear();
@@ -137,9 +199,17 @@ public partial class MainViewModel : ObservableObject
         var source = _toutesLesMeals ?? new List<Meal>();
 
         IEnumerable<Meal> result = source;
+
+        if (!string.IsNullOrWhiteSpace(_cleCategorieSelectionnee) &&
+            !_cleCategorieSelectionnee.Equals(CleToutes, StringComparison.OrdinalIgnoreCase))
+        {
+            result = result.Where(m =>
+                string.Equals((m.StrCategory ?? string.Empty).Trim(), _cleCategorieSelectionnee, StringComparison.OrdinalIgnoreCase));
+        }
+
         if (!string.IsNullOrWhiteSpace(q))
         {
-            result = source.Where(m =>
+            result = result.Where(m =>
                 (m.StrMeal ?? string.Empty).Contains(q, StringComparison.OrdinalIgnoreCase) ||
                 (m.StrCategory ?? string.Empty).Contains(q, StringComparison.OrdinalIgnoreCase) ||
                 (m.StrArea ?? string.Empty).Contains(q, StringComparison.OrdinalIgnoreCase));
