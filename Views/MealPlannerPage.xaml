@@ -5,34 +5,65 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:RecetteApp.ViewModels"
     Title="Planificateur"
+    Shell.NavBarIsVisible="True"
     BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
 
-    <Grid Padding="12" RowDefinitions="Auto,2*,3*" RowSpacing="14">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding RafraichirListeRepasCommand}" Order="Primary" Priority="0" Text="Rafraîchir" />
+    </ContentPage.ToolbarItems>
 
-        <VerticalStackLayout Grid.Row="0" Spacing="6">
+    <Grid Padding="12" RowDefinitions="Auto,Auto,2*,3*" RowSpacing="14">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10">
             <Label
-                FontSize="13"
+                Grid.Column="0"
+                FontSize="14"
                 LineBreakMode="WordWrap"
                 Opacity="0.88"
-                Text="Choisis un jour coloré, puis touche une vignette pour l’assigner à ce jour." />
-            <ActivityIndicator HorizontalOptions="Center" IsRunning="{Binding EstEnChargement}" IsVisible="{Binding EstEnChargement}" />
+                Text="Liste déroulante ou carte : sélectionne un jour, puis touche une vignette pour l’assigner."
+                VerticalOptions="Center" />
+            <ActivityIndicator
+                Grid.Column="1"
+                VerticalOptions="Center"
+                IsRunning="{Binding EstEnChargement}"
+                IsVisible="{Binding EstEnChargement}"
+                WidthRequest="36" />
+        </Grid>
+
+        <!-- Jour actif : liste déroulante bien visible -->
+        <VerticalStackLayout Grid.Row="1" Spacing="8">
+            <Label
+                FontAttributes="Bold"
+                FontSize="17"
+                Text="Jour actif"
+                TextColor="{AppThemeBinding Light=#1B5E20, Dark=#A5D6A7}" />
+            <Picker
+                Title="Choisir le jour"
+                FontSize="18"
+                ItemDisplayBinding="{Binding Titre}"
+                ItemsSource="{Binding Jours}"
+                MinimumHeightRequest="52"
+                SelectedItem="{Binding JourSelectionne, Mode=TwoWay}" />
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Jours}" SelectionMode="None" VerticalOptions="Fill">
+        <!-- Semaine : cartes plus grandes -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Jours}" SelectionMode="None" VerticalOptions="Fill">
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                <LinearItemsLayout ItemSpacing="14" Orientation="Vertical" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:JourPlanVm">
                     <Border
-                        Padding="12"
+                        Margin="0,2"
+                        Padding="16,14"
                         BackgroundColor="{Binding CouleurFondCarte}"
-                        StrokeShape="RoundRectangle 14"
+                        MinimumHeightRequest="118"
+                        StrokeShape="RoundRectangle 16"
                         StrokeThickness="0">
                         <Border.Triggers>
                             <DataTrigger Binding="{Binding EstSelectionne}" TargetType="Border" Value="True">
                                 <Setter Property="Stroke" Value="{AppThemeBinding Light=#1B5E20, Dark=#81C784}" />
-                                <Setter Property="StrokeThickness" Value="3" />
+                                <Setter Property="StrokeThickness" Value="4" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding EstSelectionne}" TargetType="Border" Value="False">
                                 <Setter Property="Stroke" Value="Transparent" />
@@ -43,12 +74,13 @@
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectionnerJourCommand}" CommandParameter="{Binding .}" />
                         </Border.GestureRecognizers>
 
-                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="8">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="12">
                             <Label
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 FontAttributes="Bold"
-                                FontSize="17"
+                                FontSize="24"
+                                LineBreakMode="TailTruncation"
                                 Text="{Binding Titre}"
                                 TextColor="{Binding CouleurTexteTitre}"
                                 VerticalOptions="Center" />
@@ -56,11 +88,11 @@
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Padding="10,4"
+                                Padding="14,8"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EffacerJourCommand}"
                                 CommandParameter="{Binding .}"
-                                CornerRadius="8"
-                                FontSize="12"
+                                CornerRadius="10"
+                                FontSize="13"
                                 IsVisible="{Binding AUnRepasPlanifie}"
                                 Text="Effacer"
                                 VerticalOptions="Center" />
@@ -69,15 +101,15 @@
                                 Grid.Row="1"
                                 Grid.ColumnSpan="2"
                                 ColumnDefinitions="Auto,*"
-                                ColumnSpacing="10">
+                                ColumnSpacing="14">
                                 <Border
                                     Grid.Column="0"
-                                    HeightRequest="56"
+                                    HeightRequest="72"
                                     IsVisible="{Binding AUnRepasPlanifie}"
                                     Stroke="{AppThemeBinding Light=#00000018, Dark=#FFFFFF22}"
-                                    StrokeShape="RoundRectangle 10"
+                                    StrokeShape="RoundRectangle 12"
                                     StrokeThickness="1"
-                                    WidthRequest="56">
+                                    WidthRequest="72">
                                     <Image Aspect="AspectFill">
                                         <Image.Source>
                                             <UriImageSource Uri="{Binding RepasChoisi.StrMealThumb}" />
@@ -85,21 +117,21 @@
                                     </Image>
                                 </Border>
 
-                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <VerticalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
                                     <Label
                                         FontAttributes="Bold"
-                                        FontSize="14"
+                                        FontSize="16"
                                         IsVisible="{Binding AUnRepasPlanifie}"
                                         LineBreakMode="TailTruncation"
                                         MaxLines="2"
                                         Text="{Binding RepasChoisi.StrMeal}"
                                         TextColor="{Binding CouleurTexteTitre}" />
                                     <Label
-                                        FontSize="13"
+                                        FontSize="15"
                                         IsVisible="{Binding SansRepasPlanifie}"
                                         LineBreakMode="WordWrap"
-                                        Opacity="0.78"
-                                        Text="Aucun repas — choisis une vignette ci-dessous."
+                                        Opacity="0.82"
+                                        Text="Aucun repas — choisis une vignette dans la liste ci-dessous."
                                         TextColor="{Binding CouleurTexteTitre}" />
                                 </VerticalStackLayout>
                             </Grid>
@@ -109,7 +141,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Grid Grid.Row="2" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="8">
+        <Grid Grid.Row="3" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="8">
 
             <Label
                 Grid.Row="0"
@@ -147,7 +179,7 @@
                             HorizontalOptions="Center"
                             HorizontalTextAlignment="Center"
                             Opacity="0.65"
-                            Text="Les vignettes apparaîtront ici. Tire pour charger des lots supplémentaires." />
+                            Text="Les vignettes apparaîtront ici. Tire pour charger plus de repas." />
                     </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PlannerMealTileVm">

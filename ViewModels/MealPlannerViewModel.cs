@@ -106,17 +106,14 @@ public partial class MealPlannerViewModel : ObservableObject
                 };
             }
 
-            await InitialiserFileEtPremiersRepasAsync();
+            await ReinitialiserTuilesRepasAsync();
 
             if (JourSelectionne is null)
-                SelectionnerJour(Jours[0]);
+                JourSelectionne = Jours[0];
             else
             {
                 var encoreLa = Jours.FirstOrDefault(j => j.DayIndex == JourSelectionne.DayIndex);
-                if (encoreLa is not null)
-                    SelectionnerJour(encoreLa);
-                else
-                    SelectionnerJour(Jours[0]);
+                JourSelectionne = encoreLa ?? Jours[0];
             }
         }
         finally
@@ -126,6 +123,12 @@ public partial class MealPlannerViewModel : ObservableObject
         }
     }
 
+    partial void OnJourSelectionneChanged(JourPlanVm? value)
+    {
+        foreach (var j in Jours)
+            j.EstSelectionne = value is not null && ReferenceEquals(j, value);
+    }
+
     private void RafraichirCouleursJours()
     {
         var sombre = Application.Current?.RequestedTheme == AppTheme.Dark;
@@ -133,7 +136,8 @@ public partial class MealPlannerViewModel : ObservableObject
             j.AppliquerPalette(sombre);
     }
 
-    private async Task InitialiserFileEtPremiersRepasAsync()
+    /// <summary>Vide et recharge la grille TheMealDB (sans toucher au plan SQLite).</summary>
+    private async Task ReinitialiserTuilesRepasAsync()
     {
         ErreurListeRepas = null;
         _plusDeLotsDispo = false;
@@ -174,6 +178,20 @@ public partial class MealPlannerViewModel : ObservableObject
         finally
         {
             _chargementListeInitial = false;
+        }
+    }
+
+    [RelayCommand]
+    public async Task RafraichirListeRepasAsync()
+    {
+        try
+        {
+            EstEnChargement = true;
+            await ReinitialiserTuilesRepasAsync();
+        }
+        finally
+        {
+            EstEnChargement = false;
         }
     }
 
@@ -244,9 +262,6 @@ public partial class MealPlannerViewModel : ObservableObject
     {
         if (jour is null)
             return;
-
-        foreach (var j in Jours)
-            j.EstSelectionne = ReferenceEquals(j, jour);
 
         JourSelectionne = jour;
     }
