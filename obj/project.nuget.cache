@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "TDxzvCzt1uo=",
+  "dgSpecHash": "LBMV+XcP27M=",
   "success": true,
   "projectFilePath": "D:\\CCNB2eANNEE\\Printemps\\PROG1342\\RecetteApp\\RecetteApp.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\nguef\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.2\\communitytoolkit.mvvm.8.4.2.nupkg.sha512",
     "C:\\Users\\nguef\\.nuget\\packages\\googlegson\\2.13.1.1\\googlegson.2.13.1.1.nupkg.sha512",
     "C:\\Users\\nguef\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.7\\microsoft.extensions.configuration.10.0.7.nupkg.sha512",
     "C:\\Users\\nguef\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\10.0.7\\microsoft.extensions.configuration.abstractions.10.0.7.nupkg.sha512",

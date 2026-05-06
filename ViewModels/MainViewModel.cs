@@ -1,25 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using RecetteApp.Models;
 using RecetteApp.Services;
+using System.Collections.ObjectModel;
 
 namespace RecetteApp.ViewModels;
 
-public class MainViewModel
+public partial class MainViewModel : ObservableObject
 {
     private readonly MealService _mealService;
 
-    public List<Meal> Meals { get; set; } = new();
+    public ObservableCollection<Meal> Meals { get; set; } = new();
+
+    [ObservableProperty]
+    public partial bool EstEnChargement { get; set; }
+
+    [ObservableProperty]
+    public partial bool EstFallback { get; set; }
 
     public MainViewModel(MealService mealService)
     {
         _mealService = mealService;
     }
 
-    public async Task LoadMeals()
+    [RelayCommand]
+    public async Task ChargerDonnees()
     {
-        Meals = await _mealService.GetMeals();
+        try
+        {
+            EstEnChargement = true;
+            EstFallback = false;
+
+            Meals.Clear();
+
+            var resultats = await _mealService.GetMeals();
+
+            foreach (var meal in resultats)
+            {
+                Meals.Add(meal);
+            }
+        }
+        catch
+        {
+            EstFallback = true;
+
+            Meals.Clear();
+
+            Meals.Add(new Meal
+            {
+                StrMeal = "Recette indisponible",
+                StrCategory = "Offline",
+                StrMealThumb = ""
+            });
+        }
+        finally
+        {
+            EstEnChargement = false;
+        }
     }
 }

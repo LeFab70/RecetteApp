@@ -24,8 +24,8 @@ namespace RecetteApp
                 client.Timeout = TimeSpan.FromSeconds(10);
             });
 
-            builder.Services.AddSingleton<MainViewModel>();
-            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<MainViewModel>();
+            builder.Services.AddTransient<MainPage>();
 
 
 #if DEBUG
