@@ -16,6 +16,7 @@ public partial class DetailViewModel : ObservableObject
 
     private readonly MealService _mealService;
     private readonly ShoppingListStore _courses;
+    private readonly FavoritesDatabase _favoritesDb;
 
     [ObservableProperty]
     public partial string IdMeal { get; set; } = string.Empty;
@@ -38,15 +39,39 @@ public partial class DetailViewModel : ObservableObject
     [ObservableProperty]
     public partial bool AfficheContenu { get; set; }
 
+    [ObservableProperty]
+    public partial bool EstFavori { get; set; }
+
     public ObservableCollection<string> Ingredients { get; } = new();
 
     public ObservableCollection<string> Etapes { get; } = new();
 
-    public DetailViewModel(MealService mealService, ShoppingListStore courses)
+    public bool AfficheCoeurDetail => AfficheContenu && Recette != null && !string.IsNullOrWhiteSpace(Recette.IdMeal);
+
+    public string SymboleCoeur => EstFavori ? "♥" : "♡";
+
+    public Color CouleurCoeur => EstFavori
+        ? Color.FromArgb("#C62828")
+        : Application.Current?.RequestedTheme == AppTheme.Dark
+            ? Color.FromArgb("#B0B0B0")
+            : Color.FromArgb("#757575");
+
+    public DetailViewModel(MealService mealService, ShoppingListStore courses, FavoritesDatabase favoritesDb)
     {
         _mealService = mealService;
         _courses = courses;
+        _favoritesDb = favoritesDb;
     }
+
+    partial void OnEstFavoriChanged(bool value)
+    {
+        OnPropertyChanged(nameof(SymboleCoeur));
+        OnPropertyChanged(nameof(CouleurCoeur));
+    }
+
+    partial void OnAfficheContenuChanged(bool value) => OnPropertyChanged(nameof(AfficheCoeurDetail));
+
+    partial void OnRecetteChanged(Meal? value) => OnPropertyChanged(nameof(AfficheCoeurDetail));
 
     partial void OnIdMealChanged(string value)
     {
@@ -61,6 +86,7 @@ public partial class DetailViewModel : ObservableObject
         EstErreur = false;
         MessageErreur = string.Empty;
         Recette = null;
+        EstFavori = false;
         AVideoYoutube = false;
         Ingredients.Clear();
         Etapes.Clear();
@@ -87,12 +113,15 @@ public partial class DetailViewModel : ObservableObject
             Recette = m;
             AfficheContenu = true;
             AVideoYoutube = !string.IsNullOrWhiteSpace(m.StrYoutube);
+            EstFavori = await _favoritesDb.EstFavoriAsync(m.IdMeal);
 
             foreach (var line in m.GetIngredientLines())
                 Ingredients.Add(line);
 
             foreach (var step in DecouperEtapes(m.StrInstructions))
                 Etapes.Add(step);
+
+            OnPropertyChanged(nameof(AfficheCoeurDetail));
         }
         finally
         {
@@ -149,6 +178,24 @@ public partial class DetailViewModel : ObservableObject
         catch
         {
             return null;
+        }
+    }
+
+    [RelayCommand]
+    private async Task BasculerFavoriCoeur()
+    {
+        if (Recette is null || string.IsNullOrWhiteSpace(Recette.IdMeal))
+            return;
+
+        if (EstFavori)
+        {
+            await _favoritesDb.Delete(Recette.IdMeal);
+            EstFavori = false;
+        }
+        else
+        {
+            await _favoritesDb.AddOrReplace(Recette);
+            EstFavori = true;
         }
     }
 

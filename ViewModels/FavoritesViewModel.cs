@@ -58,5 +58,16 @@ public partial class FavoritesViewModel : ObservableObject
         await _db.Delete(fav.IdMeal);
         Favoris.Remove(fav);
     }
+
+    /// <summary>Cœur plein : retire des favoris (comme supprimer, sans swipe).</summary>
+    [RelayCommand]
+    private async Task RetirerFavoriCoeur(FavoriteMeal? fav)
+    {
+        if (fav is null || string.IsNullOrWhiteSpace(fav.IdMeal))
+            return;
+
+        await _db.Delete(fav.IdMeal);
+        Favoris.Remove(fav);
+    }
 }
 

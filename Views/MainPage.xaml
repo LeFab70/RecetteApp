@@ -62,52 +62,73 @@
                                 StrokeShape="RoundRectangle 12"
                                 BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
 
-                                <Grid ColumnDefinitions="88,*,Auto" ColumnSpacing="10">
-                                    <Border
-                                        Grid.Column="0"
-                                        WidthRequest="88"
-                                        HeightRequest="88"
-                                        StrokeShape="RoundRectangle 12"
-                                        BackgroundColor="{AppThemeBinding Light=#F1F3F5, Dark=#2A2A2A}">
-                                        <Border.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
-                                                CommandParameter="{Binding .}" />
-                                        </Border.GestureRecognizers>
-                                        <Image Aspect="AspectFill" Source="{Binding Recette.StrMealThumb}" />
-                                    </Border>
+                                <VerticalStackLayout Spacing="10">
+                                    <!-- Haut : image + titre / métadonnées -->
+                                    <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
+                                        <Border
+                                            Grid.Column="0"
+                                            WidthRequest="88"
+                                            HeightRequest="88"
+                                            StrokeShape="RoundRectangle 12"
+                                            BackgroundColor="{AppThemeBinding Light=#F1F3F5, Dark=#2A2A2A}">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Border.GestureRecognizers>
+                                            <Image Aspect="AspectFill" Source="{Binding Recette.StrMealThumb}" />
+                                        </Border>
 
-                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                        <VerticalStackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
-                                                CommandParameter="{Binding .}" />
-                                        </VerticalStackLayout.GestureRecognizers>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                            <VerticalStackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                            </VerticalStackLayout.GestureRecognizers>
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="16"
+                                                LineBreakMode="TailTruncation"
+                                                Text="{Binding Recette.StrMeal}" />
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label FontSize="12" Text="{Binding Recette.StrCategory}" />
+                                                <Label FontSize="12" Text="•" />
+                                                <Label FontSize="12" Text="{Binding Recette.StrArea}" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!-- Bas : aperçu … | cœur -->
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                                         <Label
-                                            FontAttributes="Bold"
-                                            FontSize="16"
+                                            Grid.Column="0"
+                                            FontSize="13"
                                             LineBreakMode="TailTruncation"
-                                            Text="{Binding Recette.StrMeal}" />
-                                        <HorizontalStackLayout Spacing="8">
-                                            <Label FontSize="12" Text="{Binding Recette.StrCategory}" />
-                                            <Label FontSize="12" Text="•" />
-                                            <Label FontSize="12" Text="{Binding Recette.StrArea}" />
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
+                                            MaxLines="2"
+                                            Opacity="0.85"
+                                            Text="{Binding ApercuDescription}"
+                                            VerticalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
 
-                                    <Button
-                                        Grid.Column="2"
-                                        Padding="8,4"
-                                        BackgroundColor="Transparent"
-                                        BorderWidth="0"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BasculerFavoriCommand}"
-                                        CommandParameter="{Binding .}"
-                                        FontSize="26"
-                                        IsVisible="{Binding PeutFavoriser}"
-                                        Text="{Binding SymboleCoeur}"
-                                        TextColor="{Binding CouleurCoeur}"
-                                        VerticalOptions="Center" />
-                                </Grid>
+                                        <Button
+                                            Grid.Column="1"
+                                            Padding="8,4"
+                                            BackgroundColor="Transparent"
+                                            BorderWidth="0"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BasculerFavoriCommand}"
+                                            CommandParameter="{Binding .}"
+                                            FontSize="26"
+                                            IsVisible="{Binding PeutFavoriser}"
+                                            Text="{Binding SymboleCoeur}"
+                                            TextColor="{Binding CouleurCoeur}"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+                                </VerticalStackLayout>
                             </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

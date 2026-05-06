@@ -18,7 +18,7 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                     <Label FontSize="22" Text="⭐" HorizontalOptions="Center" />
                     <Label FontAttributes="Bold" Text="Aucun favori pour l’instant" HorizontalOptions="Center" />
-                    <Label Opacity="0.7" Text="Ajoute une recette depuis la page Recettes." HorizontalOptions="Center" />
+                    <Label Opacity="0.7" Text="Ajoute une recette depuis Recettes ou Détail." HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
 
@@ -40,34 +40,71 @@
                             Padding="10"
                             StrokeShape="RoundRectangle 12"
                             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
 
-                            <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
-                                <Border
-                                    WidthRequest="88"
-                                    HeightRequest="88"
-                                    StrokeShape="RoundRectangle 12"
-                                    BackgroundColor="{AppThemeBinding Light=#F1F3F5, Dark=#2A2A2A}">
-                                    <Image Aspect="AspectFill" Source="{Binding StrMealThumb}" />
-                                </Border>
+                            <VerticalStackLayout Spacing="10">
+                                <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
+                                    <Border
+                                        Grid.Column="0"
+                                        WidthRequest="88"
+                                        HeightRequest="88"
+                                        StrokeShape="RoundRectangle 12"
+                                        BackgroundColor="{AppThemeBinding Light=#F1F3F5, Dark=#2A2A2A}">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <Image Aspect="AspectFill" Source="{Binding StrMealThumb}" />
+                                    </Border>
 
-                                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <VerticalStackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </VerticalStackLayout.GestureRecognizers>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding StrMeal}" />
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label FontSize="12" Text="{Binding StrCategory}" />
+                                            <Label FontSize="12" Text="•" />
+                                            <Label FontSize="12" Text="{Binding StrArea}" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                                     <Label
-                                        FontAttributes="Bold"
-                                        FontSize="16"
+                                        Grid.Column="0"
+                                        FontSize="13"
                                         LineBreakMode="TailTruncation"
-                                        Text="{Binding StrMeal}" />
-                                    <HorizontalStackLayout Spacing="8">
-                                        <Label FontSize="12" Text="{Binding StrCategory}" />
-                                        <Label FontSize="12" Text="•" />
-                                        <Label FontSize="12" Text="{Binding StrArea}" />
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
-                            </Grid>
+                                        MaxLines="2"
+                                        Opacity="0.85"
+                                        Text="{Binding TexteApercuAffiche}"
+                                        VerticalOptions="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                    <Button
+                                        Grid.Column="1"
+                                        Padding="8,4"
+                                        BackgroundColor="Transparent"
+                                        BorderWidth="0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RetirerFavoriCoeurCommand}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="26"
+                                        Text="♥"
+                                        TextColor="#C62828"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </VerticalStackLayout>
                         </Border>
                     </SwipeView>
                 </DataTemplate>
@@ -75,4 +112,3 @@
         </CollectionView>
     </Grid>
 </ContentPage>
-

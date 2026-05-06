@@ -1,3 +1,4 @@
+using RecetteApp.Helpers;
 using RecetteApp.Models;
 using SQLite;
 
@@ -15,6 +16,14 @@ public class FavoritesDatabase
         var path = Path.Combine(FileSystem.AppDataDirectory, "favorites.db3");
         _db = new SQLiteAsyncConnection(path);
         await _db.CreateTableAsync<FavoriteMeal>();
+        try
+        {
+            await _db.ExecuteAsync("ALTER TABLE FavoriteMeal ADD COLUMN StrSnippet TEXT DEFAULT ''");
+        }
+        catch
+        {
+            // Colonne déjà présente
+        }
     }
 
     public async Task<List<FavoriteMeal>> GetAll()
@@ -36,10 +45,21 @@ public class FavoritesDatabase
             StrMeal = meal.StrMeal ?? string.Empty,
             StrCategory = meal.StrCategory ?? string.Empty,
             StrArea = meal.StrArea ?? string.Empty,
-            StrMealThumb = meal.StrMealThumb ?? string.Empty
+            StrMealThumb = meal.StrMealThumb ?? string.Empty,
+            StrSnippet = RecetteTexteHelper.ApercuInstructions(meal.StrInstructions, 160)
         };
 
         await _db!.InsertOrReplaceAsync(fav);
+    }
+
+    public async Task<bool> EstFavoriAsync(string idMeal)
+    {
+        if (string.IsNullOrWhiteSpace(idMeal))
+            return false;
+
+        await Init();
+        var count = await _db!.Table<FavoriteMeal>().Where(x => x.IdMeal == idMeal).CountAsync();
+        return count > 0;
     }
 
     public async Task Delete(string idMeal)

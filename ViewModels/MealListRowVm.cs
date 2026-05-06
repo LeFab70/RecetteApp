@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using RecetteApp.Helpers;
 using RecetteApp.Models;
 
 namespace RecetteApp.ViewModels;
@@ -18,6 +19,9 @@ public partial class MealListRowVm : ObservableObject
     }
 
     public bool PeutFavoriser => !string.IsNullOrWhiteSpace(Recette.IdMeal);
+
+    /// <summary>Aperçu court des instructions (carte).</summary>
+    public string ApercuDescription => RecetteTexteHelper.ApercuInstructions(Recette.StrInstructions);
 
     public string SymboleCoeur => EstFavori ? "♥" : "♡";
 

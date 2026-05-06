@@ -22,12 +22,28 @@
             <VerticalStackLayout IsVisible="{Binding AfficheContenu}" Spacing="12">
                 <Image Aspect="AspectFill" HeightRequest="220" Source="{Binding Recette.StrMealThumb}" />
 
-                <Label FontAttributes="Bold" FontSize="22" Text="{Binding Recette.StrMeal}" />
-                <HorizontalStackLayout Spacing="8">
-                    <Label FontSize="13" Opacity="0.85" Text="{Binding Recette.StrCategory}" />
-                    <Label FontSize="13" Text="•" />
-                    <Label FontSize="13" Opacity="0.85" Text="{Binding Recette.StrArea}" />
-                </HorizontalStackLayout>
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label FontAttributes="Bold" FontSize="22" Text="{Binding Recette.StrMeal}" />
+                        <HorizontalStackLayout Spacing="8">
+                            <Label FontSize="13" Opacity="0.85" Text="{Binding Recette.StrCategory}" />
+                            <Label FontSize="13" Text="•" />
+                            <Label FontSize="13" Opacity="0.85" Text="{Binding Recette.StrArea}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Button
+                        Grid.Column="1"
+                        Padding="10,6"
+                        BackgroundColor="Transparent"
+                        BorderWidth="0"
+                        Command="{Binding BasculerFavoriCoeurCommand}"
+                        FontSize="28"
+                        IsVisible="{Binding AfficheCoeurDetail}"
+                        Text="{Binding SymboleCoeur}"
+                        TextColor="{Binding CouleurCoeur}"
+                        VerticalOptions="Start" />
+                </Grid>
 
                 <HorizontalStackLayout Spacing="10">
                     <Button Command="{Binding OuvrirYoutubeCommand}" IsVisible="{Binding AVideoYoutube}" Text="Vidéo YouTube" />
