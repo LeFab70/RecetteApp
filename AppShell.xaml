@@ -10,9 +10,8 @@
     <TabBar>
         <ShellContent Title="Recettes" ContentTemplate="{DataTemplate views:MainPage}" />
         <ShellContent Title="Favoris" ContentTemplate="{DataTemplate views:FavoritesPage}" />
-        <ShellContent Title="Courses" ContentTemplate="{DataTemplate views:ShoppingListPage}" />
         <ShellContent Title="Plan" ContentTemplate="{DataTemplate views:MealPlannerPage}" />
-        <ShellContent Title="Réglages" ContentTemplate="{DataTemplate views:PreferencesPage}" />
+        <ShellContent Title="Preferences" ContentTemplate="{DataTemplate views:PreferencesPage}" />
     </TabBar>
 
 </Shell>

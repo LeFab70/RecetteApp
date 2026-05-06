@@ -4,9 +4,19 @@ namespace RecetteApp.Views;
 
 public partial class PreferencesPage : ContentPage
 {
-    public PreferencesPage(PreferencesViewModel vm)
+    private readonly ShoppingListViewModel _coursesVm;
+
+    public PreferencesPage(PreferencesViewModel prefsVm, ShoppingListViewModel coursesVm)
     {
         InitializeComponent();
-        BindingContext = vm;
+        BindingContext = prefsVm;
+        _coursesVm = coursesVm;
+        ShoppingRoot.BindingContext = _coursesVm;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _coursesVm.Charger();
     }
 }

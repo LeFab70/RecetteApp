@@ -15,9 +15,10 @@ public partial class MainViewModel : ObservableObject
 
     private const string CacheFileName = "meals_cache.json";
     private List<Meal> _toutesLesMeals = new();
+    private HashSet<string> _idsFavoris = new(StringComparer.Ordinal);
 
     [ObservableProperty]
-    public partial ObservableCollection<Meal> Meals { get; set; } = new();
+    public partial ObservableCollection<MealListRowVm> Meals { get; set; } = new();
 
     [ObservableProperty]
     public partial bool EstEnChargement { get; set; }
@@ -58,6 +59,7 @@ public partial class MainViewModel : ObservableObject
             _toutesLesMeals = resultats ?? new List<Meal>();
 
             SauvegarderCache(_toutesLesMeals);
+            await RafraichirIdsFavorisAsync();
             RafraichirListeAffichee();
         }
         catch (Exception ex)
@@ -66,6 +68,7 @@ public partial class MainViewModel : ObservableObject
 
             var cached = await ChargerDepuisCacheOuFallbackLocal();
             _toutesLesMeals = cached;
+            await RafraichirIdsFavorisAsync();
             RafraichirListeAffichee();
 
             EstErreurVisible = true;
@@ -84,26 +87,46 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task OuvrirDetail(Meal? meal)
+    private async Task OuvrirDetail(MealListRowVm? ligne)
     {
+        var meal = ligne?.Recette;
         if (meal is null || string.IsNullOrWhiteSpace(meal.IdMeal))
             return;
 
         await Shell.Current.GoToAsync($"{nameof(DetailPage)}?IdMeal={Uri.EscapeDataString(meal.IdMeal)}");
     }
 
+    /// <summary>Cœur : ajouter / retirer des favoris (SQLite). Pas de swipe sur cette liste.</summary>
     [RelayCommand]
-    private async Task AjouterAuxFavoris(Meal meal)
+    private async Task BasculerFavori(MealListRowVm? ligne)
     {
-        if (meal is null)
+        if (ligne is null || string.IsNullOrWhiteSpace(ligne.Recette.IdMeal))
             return;
 
-        await _favoritesDb.AddOrReplace(meal);
+        if (ligne.EstFavori)
+        {
+            await _favoritesDb.Delete(ligne.Recette.IdMeal);
+            ligne.EstFavori = false;
+            _idsFavoris.Remove(ligne.Recette.IdMeal);
+        }
+        else
+        {
+            await _favoritesDb.AddOrReplace(ligne.Recette);
+            ligne.EstFavori = true;
+            _idsFavoris.Add(ligne.Recette.IdMeal);
+        }
     }
 
     partial void OnTexteRechercheChanged(string value)
     {
         RafraichirListeAffichee();
+    }
+
+    private async Task RafraichirIdsFavorisAsync()
+    {
+        var favs = await _favoritesDb.GetAll();
+        _idsFavoris = favs.Select(f => f.IdMeal).Where(id => !string.IsNullOrWhiteSpace(id))
+            .ToHashSet(StringComparer.Ordinal);
     }
 
     private void RafraichirListeAffichee()
@@ -124,7 +147,8 @@ public partial class MainViewModel : ObservableObject
 
         foreach (var meal in result)
         {
-            Meals.Add(meal);
+            var estFav = !string.IsNullOrWhiteSpace(meal.IdMeal) && _idsFavoris.Contains(meal.IdMeal);
+            Meals.Add(new MealListRowVm(meal, estFav));
         }
     }
 
@@ -138,13 +162,12 @@ public partial class MainViewModel : ObservableObject
         }
         catch
         {
-            // Best-effort: ne jamais faire planter l'app pour le cache.
+            // Best-effort
         }
     }
 
     private async Task<List<Meal>> ChargerDepuisCacheOuFallbackLocal()
     {
-        // 1) Cache local (dernier succès API)
         try
         {
             var cachePath = Path.Combine(FileSystem.AppDataDirectory, CacheFileName);
@@ -161,7 +184,6 @@ public partial class MainViewModel : ObservableObject
             // ignore
         }
 
-        // 2) Fichier embarqué (fallback)
         try
         {
             using var stream = await FileSystem.OpenAppPackageFileAsync("fallback_meals.json");

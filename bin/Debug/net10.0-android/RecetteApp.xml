@@ -144,6 +144,9 @@
         <member name="P:RecetteApp.ViewModels.MainViewModel.TexteRecherche">
             <inheritdoc/>
         </member>
+        <member name="M:RecetteApp.ViewModels.MainViewModel.BasculerFavori(RecetteApp.ViewModels.MealListRowVm)">
+            <summary>Cœur : ajouter / retirer des favoris (SQLite). Pas de swipe sur cette liste.</summary>
+        </member>
         <member name="M:RecetteApp.ViewModels.MainViewModel.OnTexteRechercheChanged(System.String)">
             <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.MainViewModel.TexteRecherche"/> just changed.</summary>
             <param name="value">The new property value that was set.</param>
@@ -165,13 +168,25 @@
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.OuvrirDetailCommand"/>.</summary>
         </member>
         <member name="P:RecetteApp.ViewModels.MainViewModel.OuvrirDetailCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.OuvrirDetail(RecetteApp.Models.Meal)"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.OuvrirDetail(RecetteApp.ViewModels.MealListRowVm)"/>.</summary>
         </member>
-        <member name="F:RecetteApp.ViewModels.MainViewModel.ajouterAuxFavorisCommand">
-            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.AjouterAuxFavorisCommand"/>.</summary>
+        <member name="F:RecetteApp.ViewModels.MainViewModel.basculerFavoriCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MainViewModel.BasculerFavoriCommand"/>.</summary>
         </member>
-        <member name="P:RecetteApp.ViewModels.MainViewModel.AjouterAuxFavorisCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.AjouterAuxFavoris(RecetteApp.Models.Meal)"/>.</summary>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.BasculerFavoriCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MainViewModel.BasculerFavori(RecetteApp.ViewModels.MealListRowVm)"/>.</summary>
+        </member>
+        <member name="T:RecetteApp.ViewModels.MealListRowVm">
+            <summary>Ligne recette sur la page principale : favori via cœur (pas de swipe).</summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealListRowVm.EstFavori">
+            <inheritdoc/>
+        </member>
+        <member name="M:RecetteApp.ViewModels.MealListRowVm.OnEstFavoriChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.MealListRowVm.EstFavori"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.MealListRowVm.EstFavori"/> is changed.</remarks>
         </member>
         <member name="T:RecetteApp.ViewModels.MealPlannerViewModel">
             <inheritdoc/>
@@ -292,6 +307,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TexteRecherche">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TexteRecherche" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstFavori">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstFavori" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FavorisPourPicker">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FavorisPourPicker" generated properties.</summary>
         </member>
@@ -360,6 +378,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TexteRecherche">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TexteRecherche" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstFavori">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstFavori" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FavorisPourPicker">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FavorisPourPicker" generated properties.</summary>

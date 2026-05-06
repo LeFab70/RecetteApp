@@ -3,34 +3,90 @@
     x:Class="RecetteApp.Views.PreferencesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Réglages"
+    xmlns:vm="clr-namespace:RecetteApp.ViewModels"
+    Title="Preferences"
     BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="18">
+    <Grid Padding="12" RowDefinitions="Auto,*" RowSpacing="14">
 
-            <Label FontAttributes="Bold" FontSize="20" Text="Apparence" />
-            <Label FontSize="13" Opacity="0.8" Text="Thème (Preferences)" />
-            <Picker
-                Title="Thème"
-                ItemDisplayBinding="{Binding Label}"
-                ItemsSource="{Binding ThemesDisponibles}"
-                SelectedItem="{Binding ThemeChoisi, Mode=TwoWay}" />
+        <!-- Réglages : scroll léger -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="18">
 
-            <Label FontAttributes="Bold" FontSize="20" Text="À propos" />
-            <VerticalStackLayout Spacing="6">
-                <Label FontAttributes="Bold" Text="RecetteApp" />
-                <Label FontSize="13" Text="{Binding VersionApplication}" />
-                <Label
-                    FontSize="13"
-                    LineBreakMode="WordWrap"
-                    Opacity="0.85"
-                    Text="{Binding DescriptionApplication}" />
+                <Label FontAttributes="Bold" FontSize="20" Text="Apparence" />
+                <Label FontSize="13" Opacity="0.8" Text="Thème (Preferences)" />
+                <Picker
+                    Title="Thème"
+                    ItemDisplayBinding="{Binding Label}"
+                    ItemsSource="{Binding ThemesDisponibles}"
+                    SelectedItem="{Binding ThemeChoisi, Mode=TwoWay}" />
+
+                <Label FontAttributes="Bold" FontSize="20" Text="À propos" />
+                <VerticalStackLayout Spacing="6">
+                    <Label FontAttributes="Bold" Text="RecetteApp" />
+                    <Label FontSize="13" Text="{Binding VersionApplication}" />
+                    <Label
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Opacity="0.85"
+                        Text="{Binding DescriptionApplication}" />
+                </VerticalStackLayout>
+
+                <Label FontAttributes="Bold" FontSize="16" Text="Équipe" />
+                <Label FontSize="13" Opacity="0.85" Text="Kayleb · Fabrice · Perez" />
+
             </VerticalStackLayout>
+        </ScrollView>
 
-            <Label FontAttributes="Bold" FontSize="16" Text="Équipe" />
-            <Label FontSize="13" Opacity="0.85" Text="Kayleb · Fabrice · Perez" />
+        <!-- Liste de courses : même ViewModel que l’ancien onglet -->
+        <Grid
+            x:Name="ShoppingRoot"
+            Grid.Row="1"
+            RowDefinitions="Auto,Auto,*"
+            RowSpacing="10">
 
-        </VerticalStackLayout>
-    </ScrollView>
+            <Label
+                Grid.Row="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="Liste de courses" />
+            <Label
+                Grid.Row="1"
+                FontSize="13"
+                Opacity="0.8"
+                Text="Persistée dans Preferences · coches enregistrées automatiquement." />
+
+            <Grid Grid.Row="2" RowDefinitions="Auto,*" RowSpacing="8">
+                <HorizontalStackLayout Grid.Row="0" Spacing="10">
+                    <Button Command="{Binding EffacerCochesCommand}" Text="Retirer les cochés" />
+                    <Button Command="{Binding ToutEffacerCommand}" Text="Tout effacer" />
+                </HorizontalStackLayout>
+
+                <CollectionView Grid.Row="1" ItemsSource="{Binding Articles}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                            <Label FontSize="22" HorizontalOptions="Center" Text="🛒" />
+                            <Label FontAttributes="Bold" HorizontalOptions="Center" Text="Liste vide" />
+                            <Label HorizontalOptions="Center" Opacity="0.75" Text="Ajoute des ingrédients depuis une recette." />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ShoppingItemRow">
+                            <Border
+                                Margin="4,2"
+                                Padding="10"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                                StrokeShape="RoundRectangle 10">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <CheckBox Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding IsChecked}" />
+                                    <Label Grid.Column="1" LineBreakMode="WordWrap" Text="{Binding Text}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
+    </Grid>
 </ContentPage>

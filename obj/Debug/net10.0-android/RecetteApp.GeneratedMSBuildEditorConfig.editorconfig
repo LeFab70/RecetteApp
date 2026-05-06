@@ -120,13 +120,3 @@ build_metadata.AdditionalFiles.Inflator = SourceGen
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
-
-[/Users/fabricekouonang/Documents/Projet2_API/Views/ShoppingListPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = RecetteApp.Views.ShoppingListPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Views/ShoppingListPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Views/ShoppingListPage.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 

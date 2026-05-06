@@ -35,7 +35,6 @@ namespace RecetteApp
             builder.Services.AddTransient<DetailViewModel>();
             builder.Services.AddTransient<DetailPage>();
             builder.Services.AddTransient<ShoppingListViewModel>();
-            builder.Services.AddTransient<ShoppingListPage>();
             builder.Services.AddTransient<MealPlannerViewModel>();
             builder.Services.AddTransient<MealPlannerPage>();
             builder.Services.AddTransient<PreferencesViewModel>();
