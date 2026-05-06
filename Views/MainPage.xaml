@@ -1,12 +1,12 @@
-﻿<ContentPage
+<ContentPage
     x:Class="RecetteApp.Views.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:RecetteApp.Models"
     Title="Recettes - Menu"
-    BackgroundColor="Azure">
+    BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
 
-    <Grid Padding="10" RowDefinitions="Auto,Auto,*">
+    <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="10">
 
         <Border
             Grid.Row="0"
@@ -15,46 +15,95 @@
             IsVisible="{Binding EstFallback}">
             <Label
                 HorizontalOptions="Center"
-                Text="Mode hors ligne : affichage des données locales."
+                Text="📴 Hors ligne — affichage des données locales."
                 TextColor="#856404" />
         </Border>
 
-        <ActivityIndicator
+        <SearchBar
             Grid.Row="1"
-            Margin="0,10"
-            HorizontalOptions="Center"
-            IsRunning="{Binding EstEnChargement}"
-            IsVisible="{Binding EstEnChargement}" />
+            Placeholder="Rechercher une recette, catégorie, pays…"
+            Text="{Binding TexteRecherche}" />
 
-        <CollectionView Grid.Row="2" ItemsSource="{Binding Meals}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Meal">
-                    <Border
-                        Margin="5"
-                        Padding="10"
-                        StrokeShape="RoundRectangle 10">
+        <Border
+            Grid.Row="2"
+            Padding="10"
+            BackgroundColor="{AppThemeBinding Light=#F8D7DA, Dark=#3A1A1D}"
+            IsVisible="{Binding EstErreurVisible}">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Label
+                    Grid.Column="0"
+                    Text="{Binding MessageErreur}"
+                    TextColor="{AppThemeBinding Light=#721C24, Dark=#FFB3BA}" />
+                <Button
+                    Grid.Column="1"
+                    Text="Réessayer"
+                    Command="{Binding ReessayerCommand}" />
+            </Grid>
+        </Border>
 
-                        <HorizontalStackLayout Spacing="10">
-                            <Image
-                                Aspect="AspectFill"
-                                HeightRequest="80"
-                                Source="{Binding StrMealThumb}"
-                                WidthRequest="80" />
+        <RefreshView
+            Grid.Row="3"
+            IsRefreshing="{Binding EstEnChargement}"
+            Command="{Binding ChargerDonneesCommand}">
+            <Grid RowDefinitions="Auto,*">
+                <ActivityIndicator
+                    Grid.Row="0"
+                    Margin="0,6"
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding EstEnChargement}"
+                    IsVisible="{Binding EstEnChargement}" />
 
-                            <VerticalStackLayout>
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="16"
-                                    Text="{Binding StrMeal}" />
+                <CollectionView Grid.Row="1" ItemsSource="{Binding Meals}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Meal">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems Mode="Reveal">
+                                        <SwipeItem
+                                            Text="Favori"
+                                            BackgroundColor="#2E7D32"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AjouterAuxFavorisCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
 
-                                <Label FontSize="12" Text="{Binding StrCategory}" />
-                            </VerticalStackLayout>
-                        </HorizontalStackLayout>
+                                <Border
+                                    Margin="6,4"
+                                    Padding="10"
+                                    StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
 
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                    <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
+                                        <Border
+                                            WidthRequest="88"
+                                            HeightRequest="88"
+                                            StrokeShape="RoundRectangle 12"
+                                            BackgroundColor="{AppThemeBinding Light=#F1F3F5, Dark=#2A2A2A}">
+                                            <Image
+                                                Aspect="AspectFill"
+                                                Source="{Binding StrMealThumb}" />
+                                        </Border>
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="16"
+                                                LineBreakMode="TailTruncation"
+                                                Text="{Binding StrMeal}" />
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label FontSize="12" Text="{Binding StrCategory}" />
+                                                <Label FontSize="12" Text="•" />
+                                                <Label FontSize="12" Text="{Binding StrArea}" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </RefreshView>
 
     </Grid>
 </ContentPage>

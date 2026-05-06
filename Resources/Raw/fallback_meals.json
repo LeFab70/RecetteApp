@@ -1,0 +1,22 @@
+{
+  "meals": [
+    {
+      "idMeal": "fallback-1",
+      "strMeal": "Pâtes à l'ail (fallback)",
+      "strCategory": "Pasta",
+      "strArea": "Italian",
+      "strInstructions": "1) Faire bouillir l'eau.\n2) Cuire les pâtes.\n3) Faire revenir l'ail.\n4) Mélanger et servir.",
+      "strMealThumb": "",
+      "strYoutube": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+      "idMeal": "fallback-2",
+      "strMeal": "Bol de riz (fallback)",
+      "strCategory": "Rice",
+      "strArea": "Japanese",
+      "strInstructions": "1) Rincer le riz.\n2) Cuire.\n3) Ajouter garnitures au choix.\n4) Déguster.",
+      "strMealThumb": "",
+      "strYoutube": ""
+    }
+  ]
+}

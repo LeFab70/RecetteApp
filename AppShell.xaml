@@ -7,6 +7,13 @@
     Shell.BackgroundColor="Blue"
     Shell.TitleColor="White">
 
-    <ShellContent Title="Recettes - Menu" ContentTemplate="{DataTemplate views:MainPage}" />
+    <TabBar>
+        <ShellContent
+            Title="Recettes"
+            ContentTemplate="{DataTemplate views:MainPage}" />
+        <ShellContent
+            Title="Favoris"
+            ContentTemplate="{DataTemplate views:FavoritesPage}" />
+    </TabBar>
 
 </Shell>

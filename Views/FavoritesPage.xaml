@@ -1,0 +1,73 @@
+<ContentPage
+    x:Class="RecetteApp.Views.FavoritesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:RecetteApp.Models"
+    Title="Mes Favoris"
+    BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
+
+    <Grid Padding="12" RowDefinitions="Auto,*" RowSpacing="10">
+        <ActivityIndicator
+            Grid.Row="0"
+            HorizontalOptions="Center"
+            IsRunning="{Binding EstEnChargement}"
+            IsVisible="{Binding EstEnChargement}" />
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Favoris}">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                    <Label FontSize="22" Text="⭐" HorizontalOptions="Center" />
+                    <Label FontAttributes="Bold" Text="Aucun favori pour l’instant" HorizontalOptions="Center" />
+                    <Label Opacity="0.7" Text="Ajoute une recette depuis la page Recettes." HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:FavoriteMeal">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Reveal">
+                                <SwipeItem
+                                    Text="Supprimer"
+                                    BackgroundColor="#D9534F"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SupprimerCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Border
+                            Margin="6,4"
+                            Padding="10"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+
+                            <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
+                                <Border
+                                    WidthRequest="88"
+                                    HeightRequest="88"
+                                    StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="{AppThemeBinding Light=#F1F3F5, Dark=#2A2A2A}">
+                                    <Image Aspect="AspectFill" Source="{Binding StrMealThumb}" />
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        LineBreakMode="TailTruncation"
+                                        Text="{Binding StrMeal}" />
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label FontSize="12" Text="{Binding StrCategory}" />
+                                        <Label FontSize="12" Text="•" />
+                                        <Label FontSize="12" Text="{Binding StrArea}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
+

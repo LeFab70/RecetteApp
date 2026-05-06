@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using RecetteApp.Services;
 using RecetteApp.ViewModels;
@@ -24,8 +24,12 @@ namespace RecetteApp
                 client.Timeout = TimeSpan.FromSeconds(10);
             });
 
+            builder.Services.AddSingleton<FavoritesDatabase>();
+
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<FavoritesViewModel>();
+            builder.Services.AddTransient<FavoritesPage>();
 
 
 #if DEBUG
