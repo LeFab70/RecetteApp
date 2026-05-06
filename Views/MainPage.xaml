@@ -114,10 +114,10 @@
                                 StrokeShape="RoundRectangle 12"
                                 BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
 
-                                <VerticalStackLayout Spacing="12">
-                                    <!-- Titre / infos à gauche, avatar circulaire à droite -->
-                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="14">
-                                        <VerticalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="16">
+                                    <!-- Colonne gauche : texte + aperçu + Détails | [spacer] | cœur -->
+                                    <VerticalStackLayout Grid.Column="0" Spacing="12">
+                                        <VerticalStackLayout Spacing="6">
                                             <VerticalStackLayout.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
@@ -136,60 +136,64 @@
                                             </HorizontalStackLayout>
                                         </VerticalStackLayout>
 
-                                        <Border
-                                            Grid.Column="1"
-                                            WidthRequest="76"
-                                            HeightRequest="76"
-                                            VerticalOptions="Center"
-                                            BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#37474F}"
-                                            Stroke="{AppThemeBinding Light=#CFD8DC, Dark=#546E7A}"
-                                            StrokeShape="RoundRectangle 38"
-                                            StrokeThickness="1">
-                                            <Border.GestureRecognizers>
+                                        <Label
+                                            FontSize="13"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="3"
+                                            Opacity="0.85"
+                                            Text="{Binding ApercuDescription}">
+                                            <Label.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
                                                     CommandParameter="{Binding .}" />
-                                            </Border.GestureRecognizers>
-                                            <Image Aspect="AspectFill" Source="{Binding Recette.StrMealThumb, Converter={StaticResource ThumbUrl}}" />
-                                        </Border>
-                                    </Grid>
+                                            </Label.GestureRecognizers>
+                                        </Label>
 
-                                    <Label
-                                        FontSize="13"
-                                        LineBreakMode="TailTruncation"
-                                        MaxLines="3"
-                                        Opacity="0.85"
-                                        Text="{Binding ApercuDescription}">
-                                        <Label.GestureRecognizers>
+                                        <Grid ColumnDefinitions="Auto, *, Auto">
+                                            <Button
+                                                Grid.Column="0"
+                                                Padding="14,8"
+                                                HorizontalOptions="Start"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                CommandParameter="{Binding .}"
+                                                CornerRadius="10"
+                                                FontSize="14"
+                                                IsVisible="{Binding PeutFavoriser}"
+                                                Text="Détails" />
+                                            <Button
+                                                Grid.Column="2"
+                                                Padding="10,6"
+                                                HorizontalOptions="End"
+                                                BackgroundColor="Transparent"
+                                                BorderWidth="0"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BasculerFavoriCommand}"
+                                                CommandParameter="{Binding .}"
+                                                FontSize="26"
+                                                IsVisible="{Binding PeutFavoriser}"
+                                                Text="{Binding SymboleCoeur}"
+                                                TextColor="{Binding CouleurCoeur}"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </VerticalStackLayout>
+
+                                    <!-- Avatar circulaire à droite, centré verticalement sur la carte -->
+                                    <Border
+                                        Grid.Column="1"
+                                        WidthRequest="96"
+                                        HeightRequest="96"
+                                        VerticalOptions="Center"
+                                        BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#37474F}"
+                                        Stroke="{AppThemeBinding Light=#CFD8DC, Dark=#546E7A}"
+                                        StrokeShape="RoundRectangle 48"
+                                        StrokeThickness="1">
+                                        <Border.GestureRecognizers>
                                             <TapGestureRecognizer
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
                                                 CommandParameter="{Binding .}" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-
-                                    <!-- Bas : Détails + cœur -->
-                                    <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
-                                        <Button
-                                            Padding="14,8"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
-                                            CommandParameter="{Binding .}"
-                                            CornerRadius="10"
-                                            FontSize="14"
-                                            IsVisible="{Binding PeutFavoriser}"
-                                            Text="Détails" />
-                                        <Button
-                                            Padding="10,6"
-                                            BackgroundColor="Transparent"
-                                            BorderWidth="0"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BasculerFavoriCommand}"
-                                            CommandParameter="{Binding .}"
-                                            FontSize="26"
-                                            IsVisible="{Binding PeutFavoriser}"
-                                            Text="{Binding SymboleCoeur}"
-                                            TextColor="{Binding CouleurCoeur}"
-                                            VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
+                                        </Border.GestureRecognizers>
+                                        <Image Aspect="AspectFill" Source="{Binding Recette.StrMealThumb, Converter={StaticResource ThumbUrl}}" />
+                                    </Border>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
