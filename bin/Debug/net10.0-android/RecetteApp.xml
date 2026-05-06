@@ -191,9 +191,6 @@
         <member name="P:RecetteApp.ViewModels.JourPlanVm.EstPretPourPersistance">
             <summary>False pendant le chargement initial pour éviter d’effacer SQLite.</summary>
         </member>
-        <member name="P:RecetteApp.ViewModels.JourPlanVm.EstSelectionne">
-            <inheritdoc/>
-        </member>
         <member name="P:RecetteApp.ViewModels.JourPlanVm.CouleurFondCarte">
             <inheritdoc/>
         </member>
@@ -203,7 +200,10 @@
         <member name="P:RecetteApp.ViewModels.JourPlanVm.RepasChoisi">
             <inheritdoc/>
         </member>
-        <member name="M:RecetteApp.ViewModels.JourPlanVm.OnRepasChoisiChanged(RecetteApp.Models.FavoriteMeal)">
+        <member name="M:RecetteApp.ViewModels.JourPlanVm.PersisterEtatAsync">
+            <summary>Synchronise SQLite avec l’état actuel (utilisé après chargement sans notifier pendant la phase batch).</summary>
+        </member>
+        <member name="M:RecetteApp.ViewModels.JourPlanVm.OnRepasChoisiChanged(RecetteApp.ViewModels.RepasPickerOption)">
             <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.JourPlanVm.RepasChoisi"/> just changed.</summary>
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.JourPlanVm.RepasChoisi"/> is changed.</remarks>
@@ -293,13 +293,11 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
-            <inheritdoc/>
-            <inheritdoc/>
         </member>
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.Jours">
             <inheritdoc/>
         </member>
-        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.TuilesRepas">
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.OptionsRepas">
             <inheritdoc/>
         </member>
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.EstEnChargement">
@@ -314,24 +312,10 @@
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.PlusDeRepasDisponibles">
             <inheritdoc/>
         </member>
-        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.JourSelectionne">
-            <inheritdoc/>
-        </member>
-        <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.ReinitialiserTuilesRepasAsync">
-            <summary>Vide et recharge la grille TheMealDB (sans toucher au plan SQLite).</summary>
-        </member>
-        <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.ChargerPlusRepasAsync">
-            <summary>Appelé quand l’utilisateur approche du bas de la grille des repas.</summary>
-        </member>
         <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.OnErreurListeRepasChanged(System.String)">
             <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ErreurListeRepas"/> just changed.</summary>
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ErreurListeRepas"/> is changed.</remarks>
-        </member>
-        <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.OnJourSelectionneChanged(RecetteApp.ViewModels.JourPlanVm)">
-            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.JourSelectionne"/> just changed.</summary>
-            <param name="value">The new property value that was set.</param>
-            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.JourSelectionne"/> is changed.</remarks>
         </member>
         <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.chargerCommand">
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerCommand"/>.</summary>
@@ -351,26 +335,11 @@
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerPlusRepasCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.ChargerPlusRepasAsync"/>.</summary>
         </member>
-        <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.selectionnerJourCommand">
-            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.SelectionnerJourCommand"/>.</summary>
-        </member>
-        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.SelectionnerJourCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.SelectionnerJour(RecetteApp.ViewModels.JourPlanVm)"/>.</summary>
-        </member>
         <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.effacerJourCommand">
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.EffacerJourCommand"/>.</summary>
         </member>
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.EffacerJourCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.EffacerJour(RecetteApp.ViewModels.JourPlanVm)"/>.</summary>
-        </member>
-        <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.assignerTuileAuJourSelectionneCommand">
-            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.AssignerTuileAuJourSelectionneCommand"/>.</summary>
-        </member>
-        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.AssignerTuileAuJourSelectionneCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.AssignerTuileAuJourSelectionne(RecetteApp.ViewModels.PlannerMealTileVm)"/>.</summary>
-        </member>
-        <member name="T:RecetteApp.ViewModels.PlannerMealTileVm">
-            <summary>Vignette repas pour le planificateur (liste paginée).</summary>
         </member>
         <member name="T:RecetteApp.ViewModels.PreferencesViewModel">
             <inheritdoc/>
@@ -385,6 +354,9 @@
             <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.PreferencesViewModel.ThemeChoisi"/> just changed.</summary>
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.PreferencesViewModel.ThemeChoisi"/> is changed.</remarks>
+        </member>
+        <member name="T:RecetteApp.ViewModels.RepasPickerOption">
+            <summary>Entrée affichée dans les Pickers du planificateur.</summary>
         </member>
         <member name="T:RecetteApp.ViewModels.ShoppingItemRow">
             <inheritdoc/>
@@ -460,9 +432,6 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Favoris">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Favoris" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstSelectionne">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstSelectionne" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CouleurFondCarte">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CouleurFondCarte" generated properties.</summary>
         </member>
@@ -487,8 +456,8 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Jours">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Jours" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TuilesRepas">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TuilesRepas" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.OptionsRepas">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "OptionsRepas" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EstChargementListePlus">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EstChargementListePlus" generated properties.</summary>
@@ -498,9 +467,6 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PlusDeRepasDisponibles">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PlusDeRepasDisponibles" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.JourSelectionne">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "JourSelectionne" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ThemeChoisi">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ThemeChoisi" generated properties.</summary>
@@ -556,9 +522,6 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Favoris">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Favoris" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstSelectionne">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstSelectionne" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CouleurFondCarte">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CouleurFondCarte" generated properties.</summary>
         </member>
@@ -583,8 +546,8 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Jours">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Jours" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TuilesRepas">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TuilesRepas" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.OptionsRepas">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "OptionsRepas" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EstChargementListePlus">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EstChargementListePlus" generated properties.</summary>
@@ -594,9 +557,6 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PlusDeRepasDisponibles">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PlusDeRepasDisponibles" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.JourSelectionne">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "JourSelectionne" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ThemeChoisi">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ThemeChoisi" generated properties.</summary>
