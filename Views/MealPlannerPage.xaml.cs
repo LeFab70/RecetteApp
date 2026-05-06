@@ -26,10 +26,4 @@ public partial class MealPlannerPage : ContentPage
             await DisplayAlertAsync("Planificateur", $"Erreur au chargement : {ex.Message}", "OK");
         }
     }
-
-    private void OnRepasRemainingThreshold(object? sender, EventArgs e)
-    {
-        if (_vm.ChargerPlusRepasCommand.CanExecute(null))
-            _ = _vm.ChargerPlusRepasCommand.ExecuteAsync(null);
-    }
 }

@@ -1,9 +1,9 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel;
 using RecetteApp.Models;
 using RecetteApp.Services;
-using System.Collections.ObjectModel;
 
 namespace RecetteApp.ViewModels;
 
@@ -28,14 +28,15 @@ public partial class MealPlannerViewModel : ObservableObject
     [ObservableProperty]
     public partial ObservableCollection<JourPlanVm> Jours { get; set; } = new();
 
-    /// <summary>Repas affichés en vignettes ; complété au scroll (<see cref="ChargerPlusRepasAsync"/>).</summary>
+    /// <summary>Liste partagée pour tous les Pickers (complétée par <see cref="ChargerPlusRepasAsync"/>).</summary>
     [ObservableProperty]
-    public partial ObservableCollection<PlannerMealTileVm> TuilesRepas { get; set; } = new();
+    public partial ObservableCollection<RepasPickerOption> OptionsRepas { get; set; } = new();
+
+    public RepasPickerOption OptionAucune { get; } = new(string.Empty, "— Aucun —", string.Empty);
 
     [ObservableProperty]
     public partial bool EstEnChargement { get; set; }
 
-    /// <summary>Chargement d’un lot supplémentaire (pagination).</summary>
     [ObservableProperty]
     public partial bool EstChargementListePlus { get; set; }
 
@@ -48,18 +49,6 @@ public partial class MealPlannerViewModel : ObservableObject
 
     [ObservableProperty]
     public partial bool PlusDeRepasDisponibles { get; set; }
-
-    [ObservableProperty]
-    public partial JourPlanVm? JourSelectionne { get; set; }
-
-    public FavoriteMeal OptionAucune { get; } = new()
-    {
-        IdMeal = string.Empty,
-        StrMeal = "— Aucun —",
-        StrCategory = string.Empty,
-        StrArea = string.Empty,
-        StrMealThumb = string.Empty
-    };
 
     public MealPlannerViewModel(MealService mealService, MealPlannerDatabase planner)
     {
@@ -87,6 +76,12 @@ public partial class MealPlannerViewModel : ObservableObject
             RafraichirCouleursJours();
 
             var semaine = await _planner.GetWeekAsync();
+
+            foreach (var j in Jours)
+                j.RepasChoisi = OptionAucune;
+
+            await ReinitialiserOptionsRepasAsync();
+
             foreach (var jourVm in Jours)
             {
                 var row = semaine.FirstOrDefault(x => x.DayIndex == jourVm.DayIndex);
@@ -96,25 +91,20 @@ public partial class MealPlannerViewModel : ObservableObject
                     continue;
                 }
 
-                jourVm.RepasChoisi = new FavoriteMeal
+                var opt = OptionsRepas.FirstOrDefault(o => o.IdMeal == row.IdMeal);
+                if (opt is null)
                 {
-                    IdMeal = row.IdMeal,
-                    StrMeal = row.StrMeal,
-                    StrCategory = string.Empty,
-                    StrArea = string.Empty,
-                    StrMealThumb = row.StrMealThumb ?? string.Empty
-                };
+                    opt = new RepasPickerOption(row.IdMeal, row.StrMeal ?? "", row.StrMealThumb ?? "");
+                    OptionsRepas.Add(opt);
+                }
+
+                jourVm.RepasChoisi = opt;
             }
 
-            await ReinitialiserTuilesRepasAsync();
+            _chargementSemaineEnCours = false;
 
-            if (JourSelectionne is null)
-                JourSelectionne = Jours[0];
-            else
-            {
-                var encoreLa = Jours.FirstOrDefault(j => j.DayIndex == JourSelectionne.DayIndex);
-                JourSelectionne = encoreLa ?? Jours[0];
-            }
+            foreach (var j in Jours)
+                await j.PersisterEtatAsync();
         }
         catch (Exception ex)
         {
@@ -127,12 +117,6 @@ public partial class MealPlannerViewModel : ObservableObject
         }
     }
 
-    partial void OnJourSelectionneChanged(JourPlanVm? value)
-    {
-        foreach (var j in Jours)
-            j.EstSelectionne = value is not null && ReferenceEquals(j, value);
-    }
-
     private void RafraichirCouleursJours()
     {
         var sombre = Application.Current?.RequestedTheme == AppTheme.Dark;
@@ -140,14 +124,14 @@ public partial class MealPlannerViewModel : ObservableObject
             j.AppliquerPalette(sombre);
     }
 
-    /// <summary>Vide et recharge la grille TheMealDB (sans toucher au plan SQLite).</summary>
-    private async Task ReinitialiserTuilesRepasAsync()
+    private async Task ReinitialiserOptionsRepasAsync()
     {
         ErreurListeRepas = null;
         _plusDeLotsDispo = false;
         PlusDeRepasDisponibles = false;
         _idsDejaCharges.Clear();
-        TuilesRepas.Clear();
+        OptionsRepas.Clear();
+        OptionsRepas.Add(OptionAucune);
         _fileChargement.Clear();
 
         try
@@ -191,7 +175,45 @@ public partial class MealPlannerViewModel : ObservableObject
         try
         {
             EstEnChargement = true;
-            await ReinitialiserTuilesRepasAsync();
+            _chargementSemaineEnCours = true;
+
+            var snapshots = Jours.Select(j =>
+            {
+                var r = j.RepasChoisi;
+                return (
+                    j.DayIndex,
+                    Id: r?.IdMeal ?? string.Empty,
+                    Nom: r?.StrMeal ?? string.Empty,
+                    Thumb: r?.StrMealThumb ?? string.Empty);
+            }).ToList();
+
+            foreach (var j in Jours)
+                j.RepasChoisi = OptionAucune;
+
+            await ReinitialiserOptionsRepasAsync();
+
+            foreach (var s in snapshots)
+            {
+                var jourVm = Jours.First(j => j.DayIndex == s.DayIndex);
+                if (string.IsNullOrWhiteSpace(s.Id))
+                {
+                    jourVm.RepasChoisi = OptionAucune;
+                    continue;
+                }
+
+                var opt = OptionsRepas.FirstOrDefault(o => o.IdMeal == s.Id);
+                if (opt is null)
+                {
+                    opt = new RepasPickerOption(s.Id, s.Nom, s.Thumb);
+                    OptionsRepas.Add(opt);
+                }
+
+                jourVm.RepasChoisi = opt;
+            }
+
+            _chargementSemaineEnCours = false;
+            foreach (var j in Jours)
+                await j.PersisterEtatAsync();
         }
         catch (Exception ex)
         {
@@ -199,11 +221,11 @@ public partial class MealPlannerViewModel : ObservableObject
         }
         finally
         {
+            _chargementSemaineEnCours = false;
             EstEnChargement = false;
         }
     }
 
-    /// <summary>Appelé quand l’utilisateur approche du bas de la grille des repas.</summary>
     [RelayCommand]
     public async Task ChargerPlusRepasAsync()
     {
@@ -232,14 +254,14 @@ public partial class MealPlannerViewModel : ObservableObject
                     continue;
                 }
 
-                var nouveaux = new List<PlannerMealTileVm>();
+                var nouveaux = new List<RepasPickerOption>();
                 foreach (var m in lot)
                 {
                     var id = m.IdMeal.Trim();
                     if (_idsDejaCharges.Contains(id))
                         continue;
                     _idsDejaCharges.Add(id);
-                    nouveaux.Add(new PlannerMealTileVm(id, m.StrMeal ?? "", m.StrMealThumb ?? ""));
+                    nouveaux.Add(new RepasPickerOption(id, m.StrMeal ?? "", m.StrMealThumb ?? ""));
                 }
 
                 if (nouveaux.Count > 0)
@@ -247,7 +269,7 @@ public partial class MealPlannerViewModel : ObservableObject
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         foreach (var t in nouveaux)
-                            TuilesRepas.Add(t);
+                            OptionsRepas.Add(t);
                     });
 
                     PlusDeRepasDisponibles = false;
@@ -266,36 +288,11 @@ public partial class MealPlannerViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void SelectionnerJour(JourPlanVm? jour)
-    {
-        if (jour is null)
-            return;
-
-        JourSelectionne = jour;
-    }
-
-    [RelayCommand]
     public void EffacerJour(JourPlanVm? jour)
     {
         if (jour is null)
             return;
 
         jour.RepasChoisi = OptionAucune;
-    }
-
-    [RelayCommand]
-    public void AssignerTuileAuJourSelectionne(PlannerMealTileVm? tuile)
-    {
-        if (tuile is null || JourSelectionne is null || string.IsNullOrWhiteSpace(tuile.IdMeal))
-            return;
-
-        JourSelectionne.RepasChoisi = new FavoriteMeal
-        {
-            IdMeal = tuile.IdMeal,
-            StrMeal = tuile.StrMeal,
-            StrCategory = string.Empty,
-            StrArea = string.Empty,
-            StrMealThumb = tuile.StrMealThumb
-        };
     }
 }
