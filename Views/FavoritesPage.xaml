@@ -82,47 +82,47 @@
                                         </Label.GestureRecognizers>
                                     </Label>
 
-                                    <Grid ColumnDefinitions="Auto, *, Auto">
-                                        <Button
-                                            Grid.Column="0"
-                                            Padding="14,8"
-                                            HorizontalOptions="Start"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
-                                            CommandParameter="{Binding .}"
-                                            CornerRadius="10"
-                                            FontSize="14"
-                                            Text="Détails" />
-                                        <Button
-                                            Grid.Column="2"
-                                            Padding="10,6"
-                                            HorizontalOptions="End"
-                                            BackgroundColor="Transparent"
-                                            BorderWidth="0"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RetirerFavoriCoeurCommand}"
-                                            CommandParameter="{Binding .}"
-                                            FontSize="26"
-                                            Text="♥"
-                                            TextColor="#C62828"
-                                            VerticalOptions="Center" />
-                                    </Grid>
+                                    <Button
+                                        Padding="14,8"
+                                        HorizontalOptions="Start"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                        CommandParameter="{Binding .}"
+                                        CornerRadius="10"
+                                        FontSize="14"
+                                        Text="Détails" />
                                 </VerticalStackLayout>
 
-                                <Border
+                                <VerticalStackLayout
                                     Grid.Column="1"
-                                    WidthRequest="96"
-                                    HeightRequest="96"
-                                    VerticalOptions="Center"
-                                    BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#37474F}"
-                                    Stroke="{AppThemeBinding Light=#CFD8DC, Dark=#546E7A}"
-                                    StrokeShape="RoundRectangle 48"
-                                    StrokeThickness="1">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
-                                            CommandParameter="{Binding .}" />
-                                    </Border.GestureRecognizers>
-                                    <Image Aspect="AspectFill" Source="{Binding StrMealThumb, Converter={StaticResource ThumbUrl}}" />
-                                </Border>
+                                    Spacing="8"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center">
+                                    <Button
+                                        Padding="4"
+                                        HorizontalOptions="End"
+                                        BackgroundColor="Transparent"
+                                        BorderWidth="0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RetirerFavoriCoeurCommand}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="26"
+                                        Text="♥"
+                                        TextColor="#C62828" />
+                                    <Border
+                                        WidthRequest="96"
+                                        HeightRequest="96"
+                                        HorizontalOptions="End"
+                                        BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#37474F}"
+                                        Stroke="{AppThemeBinding Light=#CFD8DC, Dark=#546E7A}"
+                                        StrokeShape="RoundRectangle 48"
+                                        StrokeThickness="1">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OuvrirDetailCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <Image Aspect="AspectFill" Source="{Binding StrMealThumb, Converter={StaticResource ThumbUrl}}" />
+                                    </Border>
+                                </VerticalStackLayout>
                             </Grid>
                         </Border>
                     </SwipeView>
