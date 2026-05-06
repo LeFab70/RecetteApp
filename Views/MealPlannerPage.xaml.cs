@@ -16,7 +16,15 @@ public partial class MealPlannerPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.Charger();
+
+        try
+        {
+            await _vm.Charger();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Planificateur", $"Erreur au chargement : {ex.Message}", "OK");
+        }
     }
 
     private void OnRepasRemainingThreshold(object? sender, EventArgs e)

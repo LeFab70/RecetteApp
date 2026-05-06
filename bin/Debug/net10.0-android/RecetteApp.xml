@@ -7,6 +7,9 @@
         <member name="F:RecetteApp.Constants.ShoppingListPreferenceKey">
             <summary>Clé Preferences pour la liste de courses (JSON).</summary>
         </member>
+        <member name="T:RecetteApp.Converters.StringToImageSourceConverter">
+            <summary>Évite UriImageSource vide / invalide (crash fréquent sur Android).</summary>
+        </member>
         <member name="T:RecetteApp.Helpers.CategoryChipPalette">
             <summary>Couleurs pastel distinctes pour les puces catégories (style NewsApp).</summary>
         </member>
@@ -48,6 +51,9 @@
         </member>
         <member name="M:RecetteApp.Services.ShoppingListStore.MergeIngredientsFromMeal(RecetteApp.Models.Meal)">
             <summary>Ajoute les ingrédients d'une recette sans doublon (texte identique ignoré).</summary>
+        </member>
+        <member name="M:RecetteApp.Services.ThemeHelper.ApplySavedTheme(Microsoft.Maui.Controls.Application)">
+            <summary>À appeler depuis le constructeur <see cref="T:Microsoft.Maui.Controls.Application"/> : <c>ApplySavedTheme(this)</c>.</summary>
         </member>
         <member name="T:RecetteApp.ViewModels.CategoryChipVm">
             <summary>Puce catégorie sur l’accueil.</summary>

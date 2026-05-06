@@ -7,7 +7,7 @@ namespace RecetteApp
         public App()
         {
             InitializeComponent();
-            ThemeHelper.ApplySavedTheme();
+            ThemeHelper.ApplySavedTheme(this);
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

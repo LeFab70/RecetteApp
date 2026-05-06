@@ -21,7 +21,7 @@ public class MealPlannerDatabase
     {
         await Init();
         var rows = await _db!.Table<PlannedMeal>().ToListAsync();
-        var dict = rows.ToDictionary(x => x.DayIndex);
+        var dict = rows.GroupBy(x => x.DayIndex).ToDictionary(g => g.Key, g => g.First());
         var result = new List<PlannedMeal>();
         for (var i = 0; i < 7; i++)
         {
@@ -50,6 +50,6 @@ public class MealPlannerDatabase
     public async Task ClearDayAsync(int dayIndex)
     {
         await Init();
-        await _db!.DeleteAsync<PlannedMeal>(dayIndex);
+        await _db!.ExecuteAsync("DELETE FROM PlannedMeal WHERE DayIndex = ?", dayIndex);
     }
 }

@@ -3,10 +3,17 @@
     x:Class="RecetteApp.Views.MealPlannerPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:conv="clr-namespace:RecetteApp.Converters"
     xmlns:vm="clr-namespace:RecetteApp.ViewModels"
     Title="Planificateur"
     Shell.NavBarIsVisible="True"
     BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:StringToImageSourceConverter x:Key="ThumbUrl" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding RafraichirListeRepasCommand}" Order="Primary" Priority="0" Text="Rafraîchir" />
@@ -110,11 +117,7 @@
                                     StrokeShape="RoundRectangle 12"
                                     StrokeThickness="1"
                                     WidthRequest="72">
-                                    <Image Aspect="AspectFill">
-                                        <Image.Source>
-                                            <UriImageSource Uri="{Binding RepasChoisi.StrMealThumb}" />
-                                        </Image.Source>
-                                    </Image>
+                                    <Image Aspect="AspectFill" Source="{Binding RepasChoisi.StrMealThumb, Converter={StaticResource ThumbUrl}}" />
                                 </Border>
 
                                 <VerticalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
@@ -194,11 +197,7 @@
                                 </Border.GestureRecognizers>
                                 <VerticalStackLayout Spacing="6">
                                     <Border HeightRequest="78" StrokeShape="RoundRectangle 10">
-                                        <Image Aspect="AspectFill">
-                                            <Image.Source>
-                                                <UriImageSource Uri="{Binding StrMealThumb}" />
-                                            </Image.Source>
-                                        </Image>
+                                        <Image Aspect="AspectFill" Source="{Binding StrMealThumb, Converter={StaticResource ThumbUrl}}" />
                                     </Border>
                                     <Label
                                         FontSize="12"

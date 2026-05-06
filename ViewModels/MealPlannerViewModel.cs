@@ -116,6 +116,10 @@ public partial class MealPlannerViewModel : ObservableObject
                 JourSelectionne = encoreLa ?? Jours[0];
             }
         }
+        catch (Exception ex)
+        {
+            ErreurListeRepas = $"Plan : {ex.Message}";
+        }
         finally
         {
             _chargementSemaineEnCours = false;
@@ -188,6 +192,10 @@ public partial class MealPlannerViewModel : ObservableObject
         {
             EstEnChargement = true;
             await ReinitialiserTuilesRepasAsync();
+        }
+        catch (Exception ex)
+        {
+            ErreurListeRepas = ex.Message;
         }
         finally
         {

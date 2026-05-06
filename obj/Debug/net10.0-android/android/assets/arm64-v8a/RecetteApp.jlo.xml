@@ -6,7 +6,11 @@
         <constructor name="MainActivity" method="n_.ctor:(I)V:" jni_signature="(I)V" managed_parameters="System.Int32, System.Private.CoreLib" params="int p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
       </constructors>
     </type>
-    <type name="MainApplication" package="crc64b6dcf9059fc11d63" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiApplication" is_application="True" partial_assembly_qualified_name="RecetteApp.MainApplication, RecetteApp" application_constructor="MainApplication" />
+    <type name="MainApplication" package="crc64b6dcf9059fc11d63" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiApplication" is_application="True" partial_assembly_qualified_name="RecetteApp.MainApplication, RecetteApp" application_constructor="MainApplication">
+      <methods>
+        <method name="onCreate" method="n_onCreate:()V:GetOnCreateHandler" jni_signature="()V" retval="void" is_dynamically_registered="True" />
+      </methods>
+    </type>
   </jcw-types>
   <acw-types partial-assembly-name="RecetteApp" module-name="RecetteApp.dll">
     <type assembly-qualified-name="RecetteApp.MainActivity, RecetteApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="recetteapp.MainActivity" java-key="crc64b6dcf9059fc11d63.MainActivity" managed-key="RecetteApp.MainActivity" partial-assembly-qualified-name="RecetteApp.MainActivity, RecetteApp" />

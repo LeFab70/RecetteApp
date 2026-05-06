@@ -12,12 +12,7 @@ namespace RecetteApp
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                .UseMauiApp<App>();
             builder.Services.AddHttpClient<MealService>(client =>
             {
                 client.BaseAddress = new Uri("https://www.themealdb.com/api/json/v1/1/");
