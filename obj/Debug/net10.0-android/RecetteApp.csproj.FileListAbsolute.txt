@@ -4333,3 +4333,15 @@ D:/CCNB2eANNEE/Printemps/PROG1342/RecetteApp/obj/Debug/net10.0-android/android/a
 /Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/stamp/_GenerateJavaStubs 3.stamp
 /Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/stamp/_GeneratePackageManagerJava 3.stamp
 /Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/stamp/_ResolveLibraryProjectImports 3.stamp
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 2.dll
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 2.pdb
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 3.dll
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 3.pdb
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 4.dll
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 4.pdb
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 5.dll
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 5.pdb
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 6.dll
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/assets/arm64-v8a/RecetteApp 6.pdb
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/bin/classes.dex
+/Users/fabricekouonang/Documents/Projet2_API/obj/Debug/net10.0-android/android/bin/classes2.dex

@@ -288,6 +288,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.Jours">
             <inheritdoc/>
@@ -310,6 +311,9 @@
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.JourSelectionne">
             <inheritdoc/>
         </member>
+        <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.ReinitialiserTuilesRepasAsync">
+            <summary>Vide et recharge la grille TheMealDB (sans toucher au plan SQLite).</summary>
+        </member>
         <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.ChargerPlusRepasAsync">
             <summary>Appelé quand l’utilisateur approche du bas de la grille des repas.</summary>
         </member>
@@ -318,11 +322,22 @@
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ErreurListeRepas"/> is changed.</remarks>
         </member>
+        <member name="M:RecetteApp.ViewModels.MealPlannerViewModel.OnJourSelectionneChanged(RecetteApp.ViewModels.JourPlanVm)">
+            <summary>Executes the logic for when <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.JourSelectionne"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.JourSelectionne"/> is changed.</remarks>
+        </member>
         <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.chargerCommand">
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerCommand"/>.</summary>
         </member>
         <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.Charger"/>.</summary>
+        </member>
+        <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.rafraichirListeRepasCommand">
+            <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.RafraichirListeRepasCommand"/>.</summary>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MealPlannerViewModel.RafraichirListeRepasCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:RecetteApp.ViewModels.MealPlannerViewModel.RafraichirListeRepasAsync"/>.</summary>
         </member>
         <member name="F:RecetteApp.ViewModels.MealPlannerViewModel.chargerPlusRepasCommand">
             <summary>The backing field for <see cref="P:RecetteApp.ViewModels.MealPlannerViewModel.ChargerPlusRepasCommand"/>.</summary>
