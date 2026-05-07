@@ -97,7 +97,7 @@
             Grid.Row="4"
             IsRefreshing="{Binding EstEnChargement}"
             Command="{Binding ChargerDonneesCommand}">
-            <Grid RowDefinitions="Auto,*">
+            <Grid RowDefinitions="Auto,Auto,*">
                 <ActivityIndicator
                     Grid.Row="0"
                     Margin="0,6"
@@ -105,7 +105,24 @@
                     IsRunning="{Binding EstEnChargement}"
                     IsVisible="{Binding EstEnChargement}" />
 
-                <CollectionView Grid.Row="1" ItemsSource="{Binding Meals}">
+                <Border
+                    Grid.Row="1"
+                    Margin="0,4,0,6"
+                    Padding="14,12"
+                    BackgroundColor="{AppThemeBinding Light=#E3F2FD, Dark=#1A237E33}"
+                    IsVisible="{Binding AfficherMessageVideCategorie}"
+                    Stroke="{AppThemeBinding Light=#90CAF9, Dark=#5C6BC0}"
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="1">
+                    <Label
+                        FontSize="14"
+                        HorizontalTextAlignment="Center"
+                        LineBreakMode="WordWrap"
+                        Text="{Binding MessageVideCategorie}"
+                        TextColor="{AppThemeBinding Light=#0D47A1, Dark=#90CAF9}" />
+                </Border>
+
+                <CollectionView Grid.Row="2" ItemsSource="{Binding Meals}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:MealListRowVm">
                             <Border

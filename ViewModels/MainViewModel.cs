@@ -42,6 +42,13 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial string TexteRecherche { get; set; } = string.Empty;
 
+    /// <summary>Liste vide alors qu’un filtre catégorie (≠ Toutes) est actif.</summary>
+    [ObservableProperty]
+    public partial bool AfficherMessageVideCategorie { get; set; }
+
+    [ObservableProperty]
+    public partial string MessageVideCategorie { get; set; } = string.Empty;
+
     public MainViewModel(MealService mealService, FavoritesDatabase favoritesDb)
     {
         _mealService = mealService;
@@ -220,6 +227,14 @@ public partial class MainViewModel : ObservableObject
             var estFav = !string.IsNullOrWhiteSpace(meal.IdMeal) && _idsFavoris.Contains(meal.IdMeal);
             Meals.Add(new MealListRowVm(meal, estFav));
         }
+
+        var filtreCategorieActif = !string.IsNullOrWhiteSpace(_cleCategorieSelectionnee) &&
+                                   !_cleCategorieSelectionnee.Equals(CleToutes, StringComparison.OrdinalIgnoreCase);
+
+        AfficherMessageVideCategorie = filtreCategorieActif && Meals.Count == 0;
+        MessageVideCategorie = AfficherMessageVideCategorie
+            ? $"Pas de recette pour la catégorie « {_cleCategorieSelectionnee} »."
+            : string.Empty;
     }
 
     private void SauvegarderCache(List<Meal> meals)
