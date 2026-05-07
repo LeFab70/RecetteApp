@@ -218,3 +218,9 @@ Le filtre catégorie côté app s’appuie sur le champ catégorie renvoyé avec
 ## 🤖 Utilisation d’IA
 
 Cette application a été développée avec l’assistance d’un outil de copilot.
+
+## ▶️ Lancer l’app depuis VS Code
+
+1. **Récupérer le dépôt** : `git clone https://github.com/LeFab70/RecetteApp.git` puis **Fichier → Ouvrir le dossier** sur le dossier du projet.
+2. **Prérequis** : [.NET SDK](https://dotnet.microsoft.com/download) (version alignée sur `TargetFramework` du `.csproj`), charge de travail **.NET MAUI** (`dotnet workload install maui`), émulateur Android ou appareil avec débogage USB.
+3. **Terminal intégré** : `dotnet restore` puis `dotnet build -f net10.0-android -t:Run` (ou choisir la cible **Android** dans la palette de débogage si vous utilisez l’extension **C#** / **C# Dev Kit**).
