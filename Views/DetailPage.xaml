@@ -7,7 +7,11 @@
     BackgroundColor="{AppThemeBinding Light=#FFFDF9, Dark=#121212}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="14" Spacing="12">
+        <VerticalStackLayout
+            x:Name="RootStack"
+            Padding="14"
+            Opacity="0"
+            Spacing="12">
 
             <ActivityIndicator IsRunning="{Binding EstEnChargement}" IsVisible="{Binding EstEnChargement}" />
 
@@ -20,7 +24,19 @@
             </Border>
 
             <VerticalStackLayout IsVisible="{Binding AfficheContenu}" Spacing="12">
-                <Image Aspect="AspectFill" HeightRequest="220" Source="{Binding Recette.StrMealThumb}" />
+                <Border
+                    Padding="0"
+                    StrokeShape="RoundRectangle 16"
+                    StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="{AppThemeBinding Light=#00000022, Dark=#000000AA}"
+                            Opacity="0.22"
+                            Radius="18"
+                            Offset="0,7" />
+                    </Border.Shadow>
+                    <Image Aspect="AspectFill" HeightRequest="220" Source="{Binding Recette.StrMealThumb}" />
+                </Border>
 
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                     <VerticalStackLayout Grid.Column="0" Spacing="4">
@@ -38,6 +54,7 @@
                         BackgroundColor="Transparent"
                         BorderWidth="0"
                         Command="{Binding BasculerFavoriCoeurCommand}"
+                        Clicked="OnHeartClicked"
                         FontSize="28"
                         IsVisible="{Binding AfficheCoeurDetail}"
                         Text="{Binding SymboleCoeur}"

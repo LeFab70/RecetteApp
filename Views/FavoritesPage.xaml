@@ -13,7 +13,12 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid Padding="12" RowDefinitions="Auto,*" RowSpacing="10">
+    <Grid
+        x:Name="RootGrid"
+        Padding="12"
+        Opacity="0"
+        RowDefinitions="Auto,*"
+        RowSpacing="10">
         <ActivityIndicator
             Grid.Row="0"
             HorizontalOptions="Center"
@@ -47,6 +52,13 @@
                             Padding="12"
                             StrokeShape="RoundRectangle 12"
                             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                            <Border.Shadow>
+                                <Shadow
+                                    Brush="{AppThemeBinding Light=#00000022, Dark=#000000AA}"
+                                    Opacity="0.22"
+                                    Radius="16"
+                                    Offset="0,6" />
+                            </Border.Shadow>
 
                             <Grid ColumnDefinitions="*, Auto" ColumnSpacing="16">
                                 <VerticalStackLayout Grid.Column="0" Spacing="12">
@@ -104,6 +116,7 @@
                                         BorderWidth="0"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RetirerFavoriCoeurCommand}"
                                         CommandParameter="{Binding .}"
+                                        Clicked="OnHeartClicked"
                                         FontSize="26"
                                         Text="♥"
                                         TextColor="#C62828" />

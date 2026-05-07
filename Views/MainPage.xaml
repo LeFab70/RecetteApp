@@ -18,7 +18,12 @@
         <ToolbarItem Command="{Binding ChargerDonneesCommand}" Order="Primary" Priority="0" Text="Rafraîchir" />
     </ContentPage.ToolbarItems>
 
-    <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="10">
+    <Grid
+        x:Name="RootGrid"
+        Padding="12"
+        Opacity="0"
+        RowDefinitions="Auto,Auto,Auto,Auto,*"
+        RowSpacing="10">
 
         <Border
             Grid.Row="0"
@@ -123,6 +128,24 @@
                 </Border>
 
                 <CollectionView Grid.Row="2" ItemsSource="{Binding Meals}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout
+                            Padding="18,22"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Spacing="10">
+                            <Label FontSize="26" HorizontalOptions="Center" Text="🍽️" />
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="Aucune recette trouvée" />
+                            <Label
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Opacity="0.75"
+                                Text="Essaie une autre recherche ou reviens sur « Toutes »." />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:MealListRowVm">
                             <Border
@@ -130,6 +153,13 @@
                                 Padding="12"
                                 StrokeShape="RoundRectangle 12"
                                 BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                                <Border.Shadow>
+                                    <Shadow
+                                        Brush="{AppThemeBinding Light=#00000022, Dark=#000000AA}"
+                                        Opacity="0.22"
+                                        Radius="16"
+                                        Offset="0,6" />
+                                </Border.Shadow>
 
                                 <Grid ColumnDefinitions="*, Auto" ColumnSpacing="16">
                                     <!-- Colonne gauche : texte + aperçu + Détails -->
@@ -190,6 +220,7 @@
                                             BorderWidth="0"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BasculerFavoriCommand}"
                                             CommandParameter="{Binding .}"
+                                            Clicked="OnHeartClicked"
                                             FontSize="26"
                                             IsVisible="{Binding PeutFavoriser}"
                                             Text="{Binding SymboleCoeur}"
