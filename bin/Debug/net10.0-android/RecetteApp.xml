@@ -234,6 +234,12 @@
         <member name="P:RecetteApp.ViewModels.MainViewModel.TexteRecherche">
             <inheritdoc/>
         </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.AfficherMessageVideCategorie">
+            <inheritdoc/>
+        </member>
+        <member name="P:RecetteApp.ViewModels.MainViewModel.MessageVideCategorie">
+            <inheritdoc/>
+        </member>
         <member name="M:RecetteApp.ViewModels.MainViewModel.BasculerFavori(RecetteApp.ViewModels.MealListRowVm)">
             <summary>Cœur : ajouter / retirer des favoris (SQLite). Pas de swipe sur cette liste.</summary>
         </member>
@@ -453,6 +459,12 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TexteRecherche">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TexteRecherche" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AfficherMessageVideCategorie">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AfficherMessageVideCategorie" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.MessageVideCategorie">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "MessageVideCategorie" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Jours">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Jours" generated properties.</summary>
         </member>
@@ -542,6 +554,12 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TexteRecherche">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TexteRecherche" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AfficherMessageVideCategorie">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AfficherMessageVideCategorie" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.MessageVideCategorie">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "MessageVideCategorie" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Jours">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Jours" generated properties.</summary>
